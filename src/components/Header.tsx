@@ -1,10 +1,11 @@
+import HeaderLogo from "../assets/header-logo.png";
 type Props = {};
 
 const Header = ({}: Props) => {
   return (
-    <header className="relative bg-gray-100">
-      <div className="container mx-auto flex items-center justify-between py-4 px-6">
-        <div className="text-2xl font-bold">Logo</div>
+    <header className="relative bg-white shadow-lg h-[100px]">
+      <div className="flex flex-row h-full items-center justify-between container mx-auto">
+        <img src={HeaderLogo} className="h-1/2 w-auto" />
 
         <nav className="flex space-x-6">
           <a
@@ -25,10 +26,6 @@ const Header = ({}: Props) => {
         </nav>
 
         <div className="flex items-center space-x-4">
-          <a href="#login" className="text-gray-600 hover:text-gray-900">
-            Se connecter
-          </a>
-          <div className="border border-l border-slate-900 h-8 w-0"></div>
           <button className="px-4 py-2 bg-white border border-gray-400 rounded hover:bg-gray-200">
             S'inscrire
           </button>
