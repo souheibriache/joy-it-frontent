@@ -20,6 +20,8 @@ export default {
         purple: "#684087",
         secondarypurple: "#9163b5",
         joyitbg: "#F5F5F5",
+        secondaryred:"#E20716",
+        lightred: "#F8A5C1",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
