@@ -1,7 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type UserState = {
-  currentUser: null;
+  currentUser: {
+    userName: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  } | null;
   loading: boolean;
   error: boolean;
 };

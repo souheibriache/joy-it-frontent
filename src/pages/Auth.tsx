@@ -5,15 +5,38 @@ import { Facebook, Instagram, Linkedin } from "lucide-react";
 import LoginForm from "@/components/LoginForm";
 import SignUpForm from "@/components/SignUpForm";
 import { useLocation, useNavigate } from "react-router-dom";
+import AccountVerification from "@/components/AccountVerification";
+import ResendVerificationEmail from "@/components/ResendVerificationEmail ";
+import RequestResetPassword from "@/components/RequestResetPassword";
+import ResetPassword from "@/components/ResetPassword";
 type Props = {};
-const Login = ({}: Props) => {
-  const [authValue, setAuthValue] = useState<"login" | "signup">("login");
+const Auth = ({}: Props) => {
+  const [authValue, setAuthValue] = useState<string>("login");
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    setAuthValue(location.pathname === "/login" ? "login" : "signup");
+    setAuthValue(location.pathname.split("/")[1]);
   }, [location]);
+
+  const authRenderer = () => {
+    switch (authValue) {
+      case "login":
+        return <LoginForm />;
+      case "sign-up":
+        return <SignUpForm />;
+      case "account-verification":
+        return <AccountVerification />;
+      case "resend-verification-email":
+        return <ResendVerificationEmail />;
+      case "forgot-password":
+        return <RequestResetPassword />;
+      case "reset-password":
+        return <ResetPassword />;
+      default:
+        return <LoginForm />;
+    }
+  };
   return (
     <div className="overflow-hidden relative h-[calc(100vh-100px)] w-full">
       <div className="container mx-auto flex flex-row h-full">
@@ -39,7 +62,7 @@ const Login = ({}: Props) => {
           <div className="absolute shadow-xl z-0 shadow-black/20 h-[140%] w-[140%] right-5 rounded-full"></div>
         </div>
         <div className="flex-1 flex flex-col items-center py-24 gap-10 h-full">
-          {authValue === "login" ? <LoginForm /> : <SignUpForm />}
+          {authRenderer()}
           <div className="flex flex-col gap-5 items-center">
             <h1 className="text-2xl font-bold">Contactez-nous</h1>
             <div className="flex flex-row gap-5">
@@ -76,4 +99,4 @@ const Login = ({}: Props) => {
   );
 };
 
-export default Login;
+export default Auth;
