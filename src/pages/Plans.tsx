@@ -1,4 +1,3 @@
-import React from "react";
 import { Button } from "@/components/ui/button";
 import { Check, Dot } from "lucide-react";
 import { Plan, useGetAllPlans } from "@/utils/api/plan-api";

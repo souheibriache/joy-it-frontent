@@ -19,7 +19,7 @@ import PaymentDetails from "./pages/PaymentDetails";
 
 function App() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
-  const [decodedToken, setDecodedToken] = useState<any>(null);
+  const [setDecodedToken] = useState<any>(null);
   const { mutateAsync: resendVerificationEmail } = useResendVerificationEmail();
 
   useFetchCompany();

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCreateCheckoutSession, useGetPlanById } from "@/utils/api/plan-api";
 import { toast } from "sonner";
@@ -12,7 +12,6 @@ const DetailsDuPlan: React.FC = () => {
     isLoading: isCheckoutLoading,
     error: checkoutError,
   } = useCreateCheckoutSession();
-  const navigate = useNavigate();
 
   const [codePromo, setCodePromo] = useState<string>("");
   const [remise, setRemise] = useState<number>(0);

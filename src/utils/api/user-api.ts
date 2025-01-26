@@ -27,8 +27,6 @@ export const useLoginUser = () => {
     });
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-
       throw new Error("Échec de la connexion");
     }
 
