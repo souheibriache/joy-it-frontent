@@ -32,3 +32,5 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_REPOSITORY }}:latest .
           docker push ${{ secrets.DOCKERHUB_REPOSITORY }}:latest
+      - name: Apply changes
+        run: kubectl rollout restart deploy joy-it-frontend -n joy-it

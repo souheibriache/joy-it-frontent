@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import HeaderLogo from "../assets/header-logo.png";
-import { RootState } from "@/redux/store"; // Adjust path to your store
 import { useEffect } from "react";
 
 type Props = {};
