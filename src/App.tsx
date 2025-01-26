@@ -12,6 +12,10 @@ import VerificationNotification from "./components/VerificationNotification";
 import { useFetchCompany } from "./utils/api/company-api";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
+import Plans from "./pages/Plans";
+import CreateCompany from "./pages/CreateCompany";
+import PlanDetails from "./pages/PlanDetails";
+import PaymentDetails from "./pages/PaymentDetails";
 
 function App() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
@@ -80,6 +84,32 @@ function App() {
             </PublicRoute>
           }
         />
+        <Route
+          path="/plans"
+          element={
+            <ProtectedRoute>
+              <Plans />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/plans/:planId"
+          element={
+            <ProtectedRoute>
+              <PlanDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/payment-success"
+          element={
+            <ProtectedRoute>
+              <PaymentDetails />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/" element={<Home />} />
 
@@ -87,7 +117,7 @@ function App() {
           path="/create-company"
           element={
             <ProtectedRoute>
-              <div>Create Company</div>
+              <CreateCompany />
             </ProtectedRoute>
           }
         />
