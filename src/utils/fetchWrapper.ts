@@ -1,8 +1,7 @@
 import { resetAuth, signInSuccess } from "../redux/auth/auth-slice";
 import { store } from "../redux/store";
 import { resetUser } from "../redux/auth/user-slice";
-
-const baseUrl = import.meta.env.VITE_API_BASE_URL;
+import { API_BASE_URL } from "./constants";
 
 export const fetchWithAuth = async (
   url: string,
@@ -24,7 +23,7 @@ export const fetchWithAuth = async (
 
   let fetchOptions = { ...options, headers };
 
-  let response = await fetch(baseUrl + url, fetchOptions);
+  let response = await fetch(API_BASE_URL + url, fetchOptions);
 
   if (response.status === 401) {
     try {
@@ -37,7 +36,7 @@ export const fetchWithAuth = async (
       );
 
       fetchOptions.headers.Authorization = `Bearer ${refreshResponse.accessToken}`;
-      response = await fetch(baseUrl + url, fetchOptions);
+      response = await fetch(API_BASE_URL + url, fetchOptions);
     } catch (error) {
       dispatch(resetAuth());
       dispatch(resetUser());
@@ -56,7 +55,7 @@ export const fetchWithAuth = async (
 
 export const refreshAccessToken = async (refreshToken: string) => {
   try {
-    const res = await fetch(baseUrl + "/api/refreshToken", {
+    const res = await fetch(API_BASE_URL + "/api/refreshToken", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
