@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import Home from "./pages/Home";
 import Header from "./components/Header";
 import Auth from "./pages/Auth";
 import { RootState } from "./redux/store"; // Adjust the path to your store
@@ -16,6 +15,7 @@ import Plans from "./pages/Plans";
 import CreateCompany from "./pages/CreateCompany";
 import PlanDetails from "./pages/PlanDetails";
 import PaymentDetails from "./pages/PaymentDetails";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
@@ -76,6 +76,24 @@ function App() {
             </PublicRoute>
           }
         />
+
+        <Route
+          path="/account-verification"
+          element={
+            <PublicRoute>
+              <Auth />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/resend-verification-email"
+          element={
+            <PublicRoute>
+              <Auth />
+            </PublicRoute>
+          }
+        />
+
         <Route
           path="/reset-password"
           element={
@@ -111,7 +129,7 @@ function App() {
           }
         />
 
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<LandingPage />} />
 
         <Route
           path="/create-company"

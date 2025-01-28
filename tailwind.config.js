@@ -19,6 +19,7 @@ export default {
       colors: {
         purple: "#684087",
         secondarypurple: "#9163b5",
+        beige: "#F6EADB",
         joyitbg: "#F5F5F5",
         secondaryred:"#E20716",
         lightred: "#F8A5C1",
