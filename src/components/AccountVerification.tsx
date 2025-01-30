@@ -34,9 +34,17 @@ const AccountVerification = () => {
         </p>
       )}
       {isSuccess && (
-        <p className="text-green-600 font-bold">
-          Félicitations ! Vous avez confirmé votre compte avec succès.
-        </p>
+        <div className="flex flex-col gap-5 items-center">
+          <p className="text-green-600 font-bold">
+            Félicitations ! Vous avez confirmé votre compte avec succès.
+          </p>
+          <Button
+            onClick={() => navigate("/login")}
+            className="bg-secondarypurple hover:bg-purple text-white font-semibold px-6 py-2"
+          >
+            Retour à la connexion
+          </Button>
+        </div>
       )}
       {isError && (
         <div className="flex flex-col items-center gap-4">

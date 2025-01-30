@@ -40,12 +40,9 @@ export const useFetchCompany = () => {
             } else {
               navigate("/");
             }
-          } else {
-            navigate("/create-company");
           }
         } catch (error) {
           dispatch(fetchCompanyFailure(error));
-          navigate("/create-company");
         }
       } else if (currentCompany && !currentCompany.subscription) {
         //navigate("/plans");

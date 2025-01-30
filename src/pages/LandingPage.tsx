@@ -18,11 +18,11 @@ const LandingPage = ({}: Props) => {
         <div className="flex flex-row gap-20 px-20 pt-52 container mx-auto">
           <div className="flex-1 flex flex-col items-start gap-5 p-y-32 pr-40 h-full">
             <h1 className="text-4xl font-bold text-purple  ">
-              Boostez le bien-être et la cohésion de vos équipes avec JoyIt !
+              Boostez le bien-être et la cohésion de vos équipes avec Joy-It !
             </h1>
             <p className="text-lg  text-gray-900 text-justify">
               Simplifiez l'organisation d'activités qui boostent le bien-être et
-              la cohésion de vos équipes. Avec JoyIt, découvrez des solutions
+              la cohésion de vos équipes. Avec Joy-It, découvrez des solutions
               adaptées à vos besoins, gérées en toute simplicité grâce à une
               plateforme intuitive et un système de crédits flexible.
             </p>
@@ -66,7 +66,7 @@ const LandingPage = ({}: Props) => {
           <img className="flex-1 h-[60vh] w-auto" src={Landing} alt="" />
           <div className="flex flex-1 flex-col self-center gap-5">
             <h1 className="text-purple font-bold text-2xl">
-              Pourquoi choisir JoyIt ?
+              Pourquoi choisir Joy-It ?
             </h1>
             <div className="flex flex-col gap-3 w-5/6 text-xl ">
               <li>
@@ -141,8 +141,8 @@ const LandingPage = ({}: Props) => {
                 Bonus : Une activité inédite chaque mois !
               </h3>
               <p className="w-64 text-center">
-                Pour bien commencer, JoyIt propose une activité exclusive chaque
-                mois, spécialement conçue pour vos équipes.
+                Pour bien commencer, Joy-It propose une activité exclusive
+                chaque mois, spécialement conçue pour vos équipes.
               </p>
             </div>
           </div>
@@ -153,10 +153,10 @@ const LandingPage = ({}: Props) => {
             <img src={Testimonials} className="h-full scale-125" alt="" />
             <div className="flex flex-col gap-5">
               <h1 className="text-4xl font-bold text-purple uppercase">
-                Ils ont choisi JoyIt et en parlent mieux que nous !
+                Ils ont choisi Joy-It et en parlent mieux que nous !
               </h1>
               <p className="text-2xl">
-                “Grâce à JoyIt, nos équipes sont plus soudées et motivées.”{" "}
+                “Grâce à Joy-It, nos équipes sont plus soudées et motivées.”{" "}
               </p>
               <h2 className="text-3xl font-semibold">Clara, DRH</h2>
             </div>
@@ -170,20 +170,20 @@ const LandingPage = ({}: Props) => {
           <p className="text-xl text-center px-40 text-gray-700">
             Nos services sont pensés pour soutenir votre politique de
             Responsabilité Sociétale des Entreprises (RSE). En collaborant avec
-            JoyIt, vous favorisez un cadre de travail équilibré et respectueux
+            Joy-It, vous favorisez un cadre de travail équilibré et respectueux
             de l'environnement, tout en consolidant vos valeurs éthiques et
             sociétales.
           </p>
         </div>
 
-        <div className="flex flex-row w-full h-[90vh] bg-beige bg-opacity-40">
-          <div className="flex bg-purple w-2/5 bg-opacity-80 relative">
-            <img src={ContactImage} className=" absolute h-full w-full" />
+        <div className="flex flex-row w-full bg-beige bg-opacity-40">
+          <div className="flex bg-purple bg-opacity-80 relative">
+            <img src={ContactImage} className=" absolute h-auto w-2/5" />
             <h1 className="text-4xl text-white font-bold w-full text-center p-20 z-10">
               Prêt à offrir le meilleur à vos collaborateurs ?
             </h1>
           </div>
-          <div className="flex flex-col justify-center p-32 gap-10 w-3/5">
+          <div className="flex flex-col justify-center p-x-32 py-20 gap-10 w-3/5">
             <h1 className="text-4xl font-bold text-purple">
               Envie de dynamiser vos équipes ?<br /> Contactez-nous !
             </h1>
