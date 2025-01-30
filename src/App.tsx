@@ -1,12 +1,10 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Header from "./components/Header";
 import Auth from "./pages/Auth";
 import { RootState } from "./redux/store"; // Adjust the path to your store
-import { useResendVerificationEmail } from "./utils/api/user-api"; // Hook for resending verification email
-import { toast } from "sonner";
 import VerificationNotification from "./components/VerificationNotification";
 import { useFetchCompany } from "./utils/api/company-api";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -16,27 +14,31 @@ import CreateCompany from "./pages/CreateCompany";
 import PlanDetails from "./pages/PlanDetails";
 import PaymentDetails from "./pages/PaymentDetails";
 import LandingPage from "./pages/LandingPage";
+import AccountNotVerified from "./pages/AccountNotVerified";
 
 function App() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
-  const [setDecodedToken] = useState<any>(null);
-  const { mutateAsync: resendVerificationEmail } = useResendVerificationEmail();
+  const { currentCompany } = useSelector((state: RootState) => state.company);
+  const [decodedToken, setDecodedToken] = useState<any>(null);
+  const navigate = useNavigate();
 
   useFetchCompany();
 
   useEffect(() => {
     const handleVerificationCheck = async () => {
       if (accessToken) {
+        const decoded: any = jwtDecode(accessToken);
+        console.log({ decoded });
+        setDecodedToken(decoded);
+        if (!decoded.metadata.isVerified) {
+          navigate("/account-not-verified", {
+            state: { email: decoded.metadata.email },
+          });
+          return;
+        }
         try {
-          const decoded: any = jwtDecode(accessToken);
-          setDecodedToken(decoded);
-
-          if (!decoded.metadata.isVerified) {
-            await resendVerificationEmail({ email: decoded.metadata.email });
-
-            toast.success(
-              "Un e-mail de vérification a été envoyé. Veuillez vérifier votre boîte mail."
-            );
+          if (!currentCompany) {
+            navigate("/create-company");
           }
         } catch (error) {
           console.error("Invalid token:", error);
@@ -45,7 +47,7 @@ function App() {
     };
 
     handleVerificationCheck();
-  }, [accessToken, resendVerificationEmail]);
+  }, [accessToken, navigate]);
 
   return (
     <div>
@@ -84,6 +86,10 @@ function App() {
               <Auth />
             </PublicRoute>
           }
+        />
+        <Route
+          path="/account-not-verified"
+          element={<AccountNotVerified email={decodedToken?.metadata?.email} />}
         />
         <Route
           path="/resend-verification-email"

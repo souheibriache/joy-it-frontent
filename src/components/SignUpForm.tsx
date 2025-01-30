@@ -2,12 +2,12 @@ import { Lock, Mail, RefreshCcw, User } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { useSignupUser } from "@/utils/api/user-api";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
 const SignUpForm = ({}: Props) => {
   const { signupUserRequest, isLoading } = useSignupUser();
-
   const [formData, setFormData] = useState({
     userName: "",
     firstName: "",
@@ -16,6 +16,8 @@ const SignUpForm = ({}: Props) => {
     password: "",
     confirmPassword: "",
   });
+  const [isSuccess, setIsSuccess] = useState(false); // State to track success
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +29,7 @@ const SignUpForm = ({}: Props) => {
       formData;
 
     if (password !== confirmPassword) {
-      return alert("Passwords do not match");
+      return alert("Les mots de passe ne correspondent pas");
     }
 
     try {
@@ -38,17 +40,37 @@ const SignUpForm = ({}: Props) => {
         email,
         password,
       });
+      setIsSuccess(true);
     } catch (error) {
       console.error("Signup failed:", error);
     }
   };
+
+  if (isSuccess) {
+    return (
+      <div className="flex flex-col items-center gap-5 my-auto">
+        <h1 className="text-2xl font-bold text-center">
+          Un email de vérification a été envoyé à votre boîte mail.
+        </h1>
+        <p className="text-gray-700 text-center">
+          Veuillez vérifier votre boîte mail pour confirmer votre compte.
+        </p>
+        <Button
+          onClick={() => navigate("/login")}
+          className="font-semibold bg-purple hover:bg-secondarypurple text-lg p-5 px-10"
+        >
+          Retour à la connexion
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <form
       onSubmit={handleSubmit}
       className="flex-1 flex flex-col items-center gap-10 h-full"
     >
-      <h1 className="text-2xl font-bold ">Connectez-vous </h1>
+      <h1 className="text-2xl font-bold">Connectez-vous</h1>
 
       <div className="flex flex-col items-start gap-3">
         <div className="flex flex-row gap-2 items-center w-96">
@@ -79,7 +101,7 @@ const SignUpForm = ({}: Props) => {
           <input
             type="text"
             name="userName"
-            placeholder="nom d'utilisateur"
+            placeholder="Nom d'utilisateur"
             className="border-none outline-none w-full"
             value={formData.userName}
             onChange={handleChange}
@@ -92,7 +114,7 @@ const SignUpForm = ({}: Props) => {
           <input
             type="email"
             name="email"
-            placeholder="Mail"
+            placeholder="Email"
             className="border-none outline-none w-full"
             value={formData.email}
             onChange={handleChange}
@@ -129,7 +151,7 @@ const SignUpForm = ({}: Props) => {
         disabled={isLoading}
         className="font-semibold z-50 bg-purple hover:bg-secondarypurple text-lg p-5 px-10"
       >
-        {isLoading ? "S'inscrire..." : "S'inscrir"}
+        {isLoading ? "S'inscrire..." : "S'inscrire"}
       </Button>
     </form>
   );
