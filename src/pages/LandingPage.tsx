@@ -177,13 +177,16 @@ const LandingPage = ({}: Props) => {
         </div>
 
         <div className="flex flex-row w-full bg-beige bg-opacity-40">
-          <div className="flex bg-purple bg-opacity-80 relative">
-            <img src={ContactImage} className=" absolute h-auto w-2/5" />
+          <div className="flex bg-purple bg-opacity-80 relative w-2/5 ">
+            <img
+              src={ContactImage}
+              className=" absolute h-auto w-full h-full"
+            />
             <h1 className="text-4xl text-white font-bold w-full text-center p-20 z-10">
               Prêt à offrir le meilleur à vos collaborateurs ?
             </h1>
           </div>
-          <div className="flex flex-col justify-center p-x-32 py-20 gap-10 w-3/5">
+          <div className="flex flex-col justify-center p-20 gap-10 w-3/5">
             <h1 className="text-4xl font-bold text-purple">
               Envie de dynamiser vos équipes ?<br /> Contactez-nous !
             </h1>
