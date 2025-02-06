@@ -2,6 +2,7 @@ import { resetAuth, signInSuccess } from "../redux/auth/auth-slice";
 import { store } from "../redux/store";
 import { resetUser } from "../redux/auth/user-slice";
 import { API_BASE_URL } from "./constants";
+import { resetCompany } from "@/redux/auth/company-slice";
 
 export const fetchWithAuth = async (
   url: string,
@@ -40,6 +41,7 @@ export const fetchWithAuth = async (
     } catch (error) {
       dispatch(resetAuth());
       dispatch(resetUser());
+      dispatch(resetCompany());
       window.location.href = "/sign-in";
       throw new Error("Session expirée. Veuillez vous reconnecter.");
     }

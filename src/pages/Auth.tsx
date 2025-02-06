@@ -6,7 +6,6 @@ import LoginForm from "@/components/LoginForm";
 import SignUpForm from "@/components/SignUpForm";
 import { useLocation, useNavigate } from "react-router-dom";
 import AccountVerification from "@/components/AccountVerification";
-import ResendVerificationEmail from "@/components/ResendVerificationEmail ";
 import RequestResetPassword from "@/components/RequestResetPassword";
 import ResetPassword from "@/components/ResetPassword";
 type Props = {};
@@ -25,10 +24,6 @@ const Auth = ({}: Props) => {
         return <LoginForm />;
       case "sign-up":
         return <SignUpForm />;
-      case "account-verification":
-        return <AccountVerification />;
-      case "resend-verification-email":
-        return <ResendVerificationEmail />;
       case "forgot-password":
         return <RequestResetPassword />;
       case "reset-password":
@@ -37,6 +32,7 @@ const Auth = ({}: Props) => {
         return <LoginForm />;
     }
   };
+
   return (
     <div className="overflow-hidden relative h-[calc(100vh-100px)] w-full">
       <div className="container mx-auto flex flex-row h-full">

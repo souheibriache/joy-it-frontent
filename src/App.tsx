@@ -1,6 +1,6 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import Header from "./components/Header";
 import Auth from "./pages/Auth";
@@ -14,40 +14,29 @@ import CreateCompany from "./pages/CreateCompany";
 import PlanDetails from "./pages/PlanDetails";
 import PaymentDetails from "./pages/PaymentDetails";
 import LandingPage from "./pages/LandingPage";
-import AccountNotVerified from "./pages/AccountNotVerified";
+import AccountVerification from "./components/AccountVerification";
 
 function App() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
   const { currentCompany } = useSelector((state: RootState) => state.company);
-  const [decodedToken, setDecodedToken] = useState<any>(null);
   const navigate = useNavigate();
 
   useFetchCompany();
 
   useEffect(() => {
-    const handleVerificationCheck = async () => {
-      if (accessToken) {
-        const decoded: any = jwtDecode(accessToken);
-        console.log({ decoded });
-        setDecodedToken(decoded);
-        if (!decoded.metadata.isVerified) {
-          navigate("/account-not-verified", {
-            state: { email: decoded.metadata.email },
-          });
-          return;
-        }
-        try {
-          if (!currentCompany) {
-            navigate("/create-company");
-          }
-        } catch (error) {
-          console.error("Invalid token:", error);
-        }
-      }
-    };
+    if (accessToken) {
+      const decoded: any = jwtDecode(accessToken);
 
-    handleVerificationCheck();
-  }, [accessToken, navigate]);
+      if (!decoded.metadata.isVerified) {
+        navigate("/account-verification");
+        return;
+      }
+
+      if (!currentCompany) {
+        navigate("/create-company");
+      }
+    }
+  }, [accessToken, navigate, currentCompany]);
 
   return (
     <div>
@@ -79,26 +68,7 @@ function App() {
           }
         />
 
-        <Route
-          path="/account-verification"
-          element={
-            <PublicRoute>
-              <Auth />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/account-not-verified"
-          element={<AccountNotVerified email={decodedToken?.metadata?.email} />}
-        />
-        <Route
-          path="/resend-verification-email"
-          element={
-            <PublicRoute>
-              <Auth />
-            </PublicRoute>
-          }
-        />
+        <Route path="/account-verification" element={<AccountVerification />} />
 
         <Route
           path="/reset-password"

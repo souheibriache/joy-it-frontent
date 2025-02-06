@@ -120,6 +120,7 @@ export const useSignupUser = () => {
 };
 
 export const useVerifyAccount = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const verifyAccount = async ({
     verificationToken,
   }: {
@@ -137,6 +138,15 @@ export const useVerifyAccount = () => {
       const errorData = await response.json().catch(() => ({}));
       throw new Error(errorData.message || "Verification failed");
     }
+
+    const { access_token, refresh_token } = await response.json();
+
+    dispatch(
+      signInSuccess({
+        accessToken: access_token,
+        refreshToken: refresh_token,
+      })
+    );
   };
 
   return useMutation(verifyAccount, {
