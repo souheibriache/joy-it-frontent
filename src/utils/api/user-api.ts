@@ -147,6 +147,7 @@ export const useVerifyAccount = () => {
         refreshToken: refresh_token,
       })
     );
+    await dispatch(fetchCurrentUser());
   };
 
   return useMutation(verifyAccount, {
