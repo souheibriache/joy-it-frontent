@@ -5,7 +5,6 @@ import { Facebook, Instagram, Linkedin } from "lucide-react";
 import LoginForm from "@/components/LoginForm";
 import SignUpForm from "@/components/SignUpForm";
 import { useLocation, useNavigate } from "react-router-dom";
-import AccountVerification from "@/components/AccountVerification";
 import RequestResetPassword from "@/components/RequestResetPassword";
 import ResetPassword from "@/components/ResetPassword";
 type Props = {};
