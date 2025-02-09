@@ -35,11 +35,7 @@ export const useFetchCompany = () => {
 
           if (data) {
             dispatch(fetchCompanySuccess(data));
-            if (!data.subscription) {
-              navigate("/plans");
-            } else {
-              navigate("/");
-            }
+            navigate("/");
           }
         } catch (error) {
           dispatch(fetchCompanyFailure(error));
