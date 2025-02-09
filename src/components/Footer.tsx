@@ -86,13 +86,16 @@ const Footer = ({}: Props) => {
               <div className="h-1 w-1/2 bg-purple rounded-full"></div>
             </div>
             <div className="flex justify-between w-full mt-5">
-              <a href="https://instagram.com" target="_blank">
+              <a href="https://www.instagram.com/joyit.fr/" target="_blank">
                 <Instagram
                   size={30}
                   className="cursor-pointer hover:text-purple"
                 />
               </a>
-              <a href="https://linkedin.com" target="_blank">
+              <a
+                href="https://www.linkedin.com/company/joyit1/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_companies%3B5mXXNA8FT6ytlCbGdTbtRw%3D%3D"
+                target="_blank"
+              >
                 <Linkedin
                   size={30}
                   className="cursor-pointer hover:text-purple"

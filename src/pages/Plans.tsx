@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Check, Dot } from "lucide-react";
+import { ArrowRight, Check, Dot } from "lucide-react";
 import { Plan, useGetAllPlans } from "@/utils/api/plan-api";
 import { useNavigate } from "react-router-dom";
 
@@ -76,6 +76,19 @@ const Plans = () => {
             </div>
           );
         })}
+      </div>
+      <div className="w-full flex flex-row justify-end items-center">
+        <Button
+          variant={"outline"}
+          onClick={() => navigate("/")}
+          className="group border-2 border-purple text-purple font-semibold hover:text-secondarypurple"
+        >
+          SKIP
+          <ArrowRight
+            size={30}
+            className="group-hover:translate-x-1 duration-150"
+          />
+        </Button>
       </div>
     </div>
   );

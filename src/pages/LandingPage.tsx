@@ -178,10 +178,7 @@ const LandingPage = ({}: Props) => {
 
         <div className="flex flex-row w-full bg-beige bg-opacity-40">
           <div className="flex bg-purple bg-opacity-80 relative w-2/5 ">
-            <img
-              src={ContactImage}
-              className=" absolute h-auto w-full h-full"
-            />
+            <img src={ContactImage} className=" absolute h-auto w-auto" />
             <h1 className="text-4xl text-white font-bold w-full text-center p-20 z-10">
               Prêt à offrir le meilleur à vos collaborateurs ?
             </h1>

@@ -1,12 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Image } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useCreateCompany } from "@/utils/api/company-api"; // Adjust the path
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CreateCompany = () => {
-  const { mutateAsync: createCompany, isLoading } = useCreateCompany();
   const navigate = useNavigate();
+  const { currentCompany } = useSelector((state: any) => state.company);
+
+  useEffect(() => {
+    if (currentCompany) navigate("/");
+  }, [currentCompany]);
+  const { mutateAsync: createCompany, isLoading } = useCreateCompany();
 
   const [formData, setFormData] = useState({
     name: "",

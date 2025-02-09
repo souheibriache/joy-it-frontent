@@ -15,6 +15,7 @@ import PlanDetails from "./pages/PlanDetails";
 import PaymentDetails from "./pages/PaymentDetails";
 import LandingPage from "./pages/LandingPage";
 import AccountVerification from "./components/AccountVerification";
+import About from "./pages/About";
 
 function App() {
   const accessToken = useSelector((state: RootState) => state.auth.accessToken);
@@ -119,6 +120,8 @@ function App() {
           path="/verify-notification"
           element={<VerificationNotification />}
         />
+
+        <Route path="about-us" element={<About />} />
       </Routes>
     </div>
   );
