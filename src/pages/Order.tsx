@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Check, Dot, Loader } from "lucide-react";
+import { ArrowRight, Loader } from "lucide-react";
 import { Slider } from "@/components/ui/slider";
 import { useEffect, useState } from "react";
 import { useCalculatePricing, useCreateOrder } from "@/utils/api/plan-api";
@@ -10,7 +10,7 @@ const Order = () => {
   const [employeesNumber, setEmployeesNumber] = useState<number>(5);
   const [snacking, setSnacking] = useState<boolean>(false);
   const [wellBeing, setWellBeing] = useState<boolean>(false);
-  const [teamBuilding, setTeamBuilding] = useState<boolean>(false);
+  const [teamBuilding] = useState<boolean>(false);
   const [snackingFrequency, setSnackingFrequency] = useState<number>(1);
   const [wellBeingFrequency, setWellBeingFrequency] = useState<number>(1);
   const navigate = useNavigate();
@@ -34,16 +34,13 @@ const Order = () => {
     console.log({ pricing });
   }, [pricing]);
 
-  const {
-    mutate: createOrder,
-    isLoading: isLoadingCreateOrder,
-    error: errorCreateOrder,
-  } = useCreateOrder();
+  const { mutate: createOrder, isLoading: isLoadingCreateOrder } =
+    useCreateOrder();
 
   const handleSubmit = () => {
     const orderData = {
       participants: employeesNumber,
-      duration: 3, // Assuming a 3-month engagement
+      duration: 3,
       details: [
         ...(snacking
           ? [{ serviceType: "NOURRITURE", frequency: snackingFrequency }]

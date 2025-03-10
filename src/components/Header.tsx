@@ -1,9 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import HeaderLogo from "../assets/header-logo.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "./ui/button";
-import { Bell, ChevronDown, Coins, CoinsIcon, LogOut } from "lucide-react";
+import { Bell, ChevronDown, LogOut } from "lucide-react";
 import { resetAuth } from "@/redux/auth/auth-slice";
 import { resetUser } from "@/redux/auth/user-slice";
 import { resetCompany } from "@/redux/auth/company-slice";

@@ -1,6 +1,4 @@
 import { useQuery } from "react-query";
-import { Activity } from "./plan-api";
-import { API_BASE_URL } from "../constants";
 import fetchWithAuth from "../fetchWrapper";
 import { toast } from "sonner";
 import { serializeQuery } from "../mathods";
