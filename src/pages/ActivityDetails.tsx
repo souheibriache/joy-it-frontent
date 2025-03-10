@@ -35,7 +35,7 @@ const ActivityDetails = ({}: Props) => {
             <ul className="flex flex-row items-center gap-2">
               <li className=" text-purple font-bold py-0">Accueil</li>
               <li className=" px-2 border-l-2 border-purple text-purple font-bold py-0">
-                {categories(activity?.types[0])}
+                {categories(activity?.type)}
               </li>
               <li className=" px-2 border-l-2 border-purple  font-bold py-0">
                 {activity?.name}
