@@ -78,7 +78,9 @@ const Activities = ({}: Props) => {
               onClick={() => navigate(`/activities/${activity.id}`)}
             >
               <img
-                src={activity.images.find((image: any) => image.isMain).fullUrl}
+                src={
+                  activity.images.find((image: any) => image.isMain)?.fullUrl
+                }
               />
               <div className="absolute h-full w-full bg-black bg-opacity-50 text-white flex flex-col items-start justify-end top-0 left-0 p-5">
                 <h1 className="text-2xl  font-bold">{activity?.name}</h1>
