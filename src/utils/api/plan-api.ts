@@ -111,7 +111,7 @@ export const useGetCheckoutSession = (sessionId: string) => {
 
       try {
         const response = await fetchWithAuth(
-          `/subscription/checkout/${sessionId}`
+          `/service-order/checkout/${sessionId}`
         );
         setSession(response);
       } catch (err: any) {
