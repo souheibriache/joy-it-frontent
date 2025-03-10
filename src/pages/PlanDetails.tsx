@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   useCreateCheckoutSession,
@@ -9,7 +9,7 @@ import { toast } from "sonner";
 
 const OrderDetails = () => {
   const { orderId } = useParams();
-  const { data: order, isLoading } = useOrderDetails(orderId);
+  const { data: order } = useOrderDetails(orderId);
   const { createCheckoutSession, isLoading: createCheckoutSessionIsLoading } =
     useCreateCheckoutSession();
 

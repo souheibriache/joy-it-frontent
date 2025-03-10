@@ -1,19 +1,15 @@
 import { ActivityFilter } from "@/components/ActivirtFilter";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import {
-  Activity,
-  ActivityFilterDto,
-  ActivityOptionsDto,
-} from "@/types/activity";
+import { ActivityFilterDto, ActivityOptionsDto } from "@/types/activity";
 import { useGetPaginatedActivities } from "@/utils/api/activity-api";
-import { ArrowRight, Filter, Loader } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
-const Activities = (props: Props) => {
+const Activities = ({}: Props) => {
   const [filters, setFilters] = useState<ActivityFilterDto>({});
   const [showFilters, setShowFilters] = useState(false);
 
@@ -23,12 +19,12 @@ const Activities = (props: Props) => {
     query: filters,
   });
 
-  const { activities, isLoading } = useGetPaginatedActivities(pagination);
+  const { activities } = useGetPaginatedActivities(pagination);
   const navigate = useNavigate();
 
-  const handlePageChange = (newPage: number) => {
-    setPagination((prev) => ({ ...prev, page: newPage }));
-  };
+  // const handlePageChange = (newPage: number) => {
+  //   setPagination((prev) => ({ ...prev, page: newPage }));
+  // };
 
   const handleApplyFilters = (newFilters: ActivityFilterDto) => {
     const cleanedFilters = Object.fromEntries(
