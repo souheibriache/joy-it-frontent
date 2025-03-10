@@ -3,6 +3,7 @@ import { store } from "../redux/store";
 import { resetUser } from "../redux/auth/user-slice";
 import { API_BASE_URL } from "./constants";
 import { resetCompany } from "@/redux/auth/company-slice";
+import { toast } from "sonner";
 
 export const fetchWithAuth = async (
   url: string,
@@ -31,19 +32,23 @@ export const fetchWithAuth = async (
       const refreshResponse = await refreshAccessToken(refreshToken || "");
       dispatch(
         signInSuccess({
-          accessToken: refreshResponse.accessToken,
-          refreshToken: refreshResponse.refreshToken || refreshToken,
+          accessToken: refreshResponse.access_token,
+          refreshToken: refreshResponse.refresh_token || refreshToken,
         })
       );
 
-      fetchOptions.headers.Authorization = `Bearer ${refreshResponse.accessToken}`;
+      if (refreshResponse.error || refreshResponse.statusCode === 422) {
+        throw new Error("Session expirée. Veuillez vous reconnecter.");
+      }
+
+      fetchOptions.headers.Authorization = `Bearer ${refreshResponse.access_token}`;
       response = await fetch(API_BASE_URL + url, fetchOptions);
-    } catch (error) {
+    } catch (error: any) {
       dispatch(resetAuth());
       dispatch(resetUser());
       dispatch(resetCompany());
-      window.location.href = "/sign-in";
-      throw new Error("Session expirée. Veuillez vous reconnecter.");
+      toast.error(error?.message);
+      //window.location.href = "/sign-in";
     }
   }
 
@@ -57,7 +62,7 @@ export const fetchWithAuth = async (
 
 export const refreshAccessToken = async (refreshToken: string) => {
   try {
-    const res = await fetch(API_BASE_URL + "/api/refreshToken", {
+    const res = await fetch(API_BASE_URL + "/accounts/refresh-token", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

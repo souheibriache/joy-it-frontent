@@ -25,7 +25,6 @@ export const useFetchCompany = () => {
       if (!accessToken) {
         return;
       }
-
       if (!currentCompany) {
         dispatch(fetchCompanyStart());
         try {
