@@ -1,7 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import HeaderLogo from "../assets/header-logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Bell, ChevronDown, LogOut } from "lucide-react";
 import { resetAuth } from "@/redux/auth/auth-slice";
@@ -25,16 +25,15 @@ const Header = ({}: Props) => {
     (order: any) => order.status === "ACTIVE"
   );
 
-  const availableServices: Record<string, number> = currentPlan
-    ? currentPlan?.details.map((detail: any) => {
-        return {
-          [detail.serviceType]: detail.allowedBookings - detail.bookingsUsed,
-        };
-      })
-    : {};
+  let availableServices: Record<string, number> = {};
+  currentPlan?.details.forEach(
+    (detail: any) =>
+      (availableServices[detail.serviceType] =
+        detail.allowedBookings - detail.bookingsUsed)
+  );
 
   const totalAvailableBookings = Object.values(availableServices).reduce(
-    (sum, value) => {
+    (sum: number, value: number) => {
       return (sum += value);
     },
     0
@@ -46,6 +45,14 @@ const Header = ({}: Props) => {
     dispatch(resetCompany());
     window.location.pathname = "/login";
   };
+
+  useEffect(() => {
+    console.log({
+      availableServices,
+      totalAvailableBookings,
+      currentPlan,
+    });
+  }, [availableServices, totalAvailableBookings, currentPlan]);
 
   return (
     <header className="relative bg-white shadow-lg h-[100px]">
