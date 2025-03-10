@@ -4,7 +4,7 @@ type Props = {};
 
 const Footer = ({}: Props) => {
   return (
-    <div className="bg-gray-50 h-full">
+    <div className="bg-gray-50 h-full mt-auto bottom-0">
       <div className="container mx-auto flex flex-col items-center justify-between h-full py-20 gap-10">
         <div className="flex flex-row items-center justify-start w-full">
           <img src={logo} className="h-20" />

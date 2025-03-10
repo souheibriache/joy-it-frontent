@@ -9,16 +9,20 @@ import VerificationNotification from "./components/VerificationNotification";
 import { useFetchCompany } from "./utils/api/company-api";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
-import Plans from "./pages/Plans";
+import Order from "./pages/Order";
 import CreateCompany from "./pages/CreateCompany";
 import PlanDetails from "./pages/PlanDetails";
 import PaymentDetails from "./pages/PaymentDetails";
 import LandingPage from "./pages/LandingPage";
 import AccountVerification from "./components/AccountVerification";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
+import fetchWithAuth from "./utils/fetchWrapper";
+import Activities from "./pages/Activities";
+import ActivityDetails from "./pages/ActivityDetails";
 
 function App() {
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
+  const { accessToken } = useSelector((state: RootState) => state.auth);
   const { currentCompany } = useSelector((state: RootState) => state.company);
   const navigate = useNavigate();
 
@@ -27,6 +31,12 @@ function App() {
   useEffect(() => {
     if (accessToken) {
       const decoded: any = jwtDecode(accessToken);
+
+      const expired = decoded.iat * 1000 < Date.now();
+      if (expired) {
+        fetchWithAuth("/accounts/profile");
+        return;
+      }
 
       if (!decoded.metadata.isVerified) {
         navigate("/account-verification");
@@ -80,16 +90,16 @@ function App() {
           }
         />
         <Route
-          path="/plans"
+          path="/order"
           element={
             <ProtectedRoute>
-              <Plans />
+              <Order />
             </ProtectedRoute>
           }
         />
 
         <Route
-          path="/plans/:planId"
+          path="/order/:orderId"
           element={
             <ProtectedRoute>
               <PlanDetails />
@@ -121,7 +131,12 @@ function App() {
           element={<VerificationNotification />}
         />
 
+        <Route path="/activities" element={<Activities />} />
+
+        <Route path="/activities/:activityId" element={<ActivityDetails />} />
+
         <Route path="about-us" element={<About />} />
+        <Route path="contact-us" element={<Contact />} />
       </Routes>
     </div>
   );

@@ -49,7 +49,7 @@ export const useLoginUser = () => {
         );
         toast.success("Connecté avec succès");
         await dispatch(fetchCurrentUser());
-        navigate("/home");
+        navigate("/");
       } else {
         toast.error("Identifiants invalides. Veuillez réessayer.");
         reset();
