@@ -1,17 +1,16 @@
 import { useGetActivityById } from "@/utils/api/activity-api";
 import { categories } from "@/utils/enums";
-import { Loader, Star } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Loader } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import StarIcon from "../assets/icons/StarIcon.svg";
 import HalfStarIcon from "../assets/icons/HalfStarIcon.svg";
 import Footer from "@/components/Footer";
 
 type Props = {};
 
-const ActivityDetails = (props: Props) => {
+const ActivityDetails = ({}: Props) => {
   const { activityId } = useParams<{ activityId: string }>();
-  const navigate = useNavigate();
   const [mainImage, setMainImage] = useState<any>();
 
   const { activity, isLoading: isFetching } = useGetActivityById(
