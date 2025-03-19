@@ -8,7 +8,9 @@ type Props = {};
 const Services = ({}: Props) => {
   return (
     <div className="container mx-auto flex flex-col justify-evenly h-screen items-center">
-      <h1 className="text-4xl text-purple font-black">Explorer nos services</h1>
+      <h1 className="text-4xl text-primary font-black">
+        Explorer nos services
+      </h1>
       <div className="flex flex-row w-full gap-20">
         <div className="flex flex-col flex-1 items-center text-center gap-5">
           <div className="relative ">
@@ -24,7 +26,9 @@ const Services = ({}: Props) => {
           <h5 className="text-xl text-gray-600 h-16">
             Découvrez les activités de team-building.
           </h5>
-          <Button className="bg-purple hover:bg-purple w-40">Découvrir</Button>
+          <Button className="bg-primary hover:bg-primary w-40">
+            Découvrir
+          </Button>
         </div>
 
         <div className="flex flex-col flex-1 items-center text-center gap-5">
@@ -41,7 +45,9 @@ const Services = ({}: Props) => {
           <h5 className="text-xl text-gray-600 h-16">
             Offrez-vous un moment de détente avec nos activités bien-être.
           </h5>
-          <Button className="bg-purple hover:bg-purple w-40">Découvrir</Button>
+          <Button className="bg-primary hover:bg-primary w-40">
+            Découvrir
+          </Button>
         </div>
 
         <div className="flex flex-col flex-1 items-center text-center gap-5">
@@ -57,7 +63,9 @@ const Services = ({}: Props) => {
             Savourez nos snacks sucrés et salés pour des pauses gourmandes et
             conviviales.
           </h5>
-          <Button className="bg-purple hover:bg-purple w-40">Découvrir</Button>
+          <Button className="bg-primary hover:bg-primary w-40">
+            Découvrir
+          </Button>
         </div>
       </div>
     </div>

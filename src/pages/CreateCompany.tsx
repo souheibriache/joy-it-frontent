@@ -75,14 +75,15 @@ const CreateCompany = () => {
       className="flex flex-col items-center container mx-auto py-20 gap-10"
       onSubmit={handleSubmit}
     >
-      <p className="text-4xl text-purple font-bold border-l-4 pl-5 border-l-purple">
+      <p className="text-4xl text-primary font-bold border-l-4 pl-5 border-l-primary">
         Renseignez quelques informations !
       </p>
 
       <div className="grid grid-cols-2 gap-x-20 gap-y-10">
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="name">
-            Nom de l’entreprise <span className="font-bold text-purple">*</span>
+            Nom de l’entreprise{" "}
+            <span className="font-bold text-primary">*</span>
           </label>
           <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
             <input
@@ -100,7 +101,7 @@ const CreateCompany = () => {
         {/* Logo Upload */}
         <div className="flex flex-col items-start gap-2">
           <p>
-            Logo d'entreprise <span className="font-bold text-purple">*</span>
+            Logo d'entreprise <span className="font-bold text-primary">*</span>
           </p>
           <div
             className="flex flex-col justify-center items-center h-16 w-16 border border-gray-300 rounded-lg cursor-pointer"
@@ -129,7 +130,7 @@ const CreateCompany = () => {
 
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="city">
-            Ville <span className="font-bold text-purple">*</span>
+            Ville <span className="font-bold text-primary">*</span>
           </label>
           <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
             <input
@@ -147,7 +148,7 @@ const CreateCompany = () => {
         {/* Other input fields */}
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="address">
-            Address <span className="font-bold text-purple">*</span>
+            Address <span className="font-bold text-primary">*</span>
           </label>
           <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
             <input
@@ -164,7 +165,7 @@ const CreateCompany = () => {
 
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="postalCode">
-            Code postale <span className="font-bold text-purple">*</span>
+            Code postale <span className="font-bold text-primary">*</span>
           </label>
           <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
             <input
@@ -181,7 +182,8 @@ const CreateCompany = () => {
 
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="phoneNumber">
-            Numéro de téléphone <span className="font-bold text-purple">*</span>
+            Numéro de téléphone{" "}
+            <span className="font-bold text-primary">*</span>
           </label>
           <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
             <input
@@ -198,7 +200,7 @@ const CreateCompany = () => {
 
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="employeesNumber">
-            Nombre d'employés <span className="font-bold text-purple">*</span>
+            Nombre d'employés <span className="font-bold text-primary">*</span>
           </label>
           <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
             <input
@@ -215,7 +217,7 @@ const CreateCompany = () => {
 
         <div className="flex flex-col items-start gap-2">
           <label htmlFor="siretNumber">
-            Numéro SIRET<span className="font-bold text-purple">*</span>
+            Numéro SIRET<span className="font-bold text-primary">*</span>
           </label>
           <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
             <input
@@ -233,7 +235,7 @@ const CreateCompany = () => {
       <Button
         type="submit"
         disabled={isLoading}
-        className="font-semibold z-50 bg-purple hover:bg-secondarypurple text-lg p-5 px-10"
+        className="font-semibold z-50 bg-primary hover:bg-secondary text-lg p-5 px-10"
       >
         {isLoading ? "Chargement..." : "Soumettre"}
       </Button>

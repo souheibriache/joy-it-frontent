@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import logo from "../assets/logo.png";
+import logo from "../assets/logo.svg";
 import { Button } from "@/components/ui/button";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
 import LoginForm from "@/components/LoginForm";
@@ -37,7 +37,7 @@ const Auth = ({}: Props) => {
       <div className="container mx-auto flex flex-row h-full">
         <div className="flex flex-col justify-evenly flex-1 items-center p-40 py-32 relative -translate-x-24 ">
           <img src={logo} className="h-32" />
-          <h1 className="text-3xl font-bold text-purple text-nowrap">
+          <h1 className="text-3xl font-bold text-primary text-nowrap">
             Rejoignez-nous en quelques clics !
           </h1>
           <p className="text-xl text-center text-gray-900 w-3/4">
@@ -49,7 +49,7 @@ const Auth = ({}: Props) => {
               navigate(authValue === "login" ? "/sign-up" : "/login")
             }
             variant="outline"
-            className="border-2 z-10 border-purple text-purple font-semibold text-lg hover:bg-white hover:text-secondarypurple hover:border-secondarypurple"
+            className="border-2 z-10 border-primary text-primary font-semibold text-lg hover:bg-white hover:text-secondary hover:border-secondary"
           >
             {authValue === "login" ? "S'inscrire" : "Se connecter"}
           </Button>
@@ -64,19 +64,19 @@ const Auth = ({}: Props) => {
               <a href="https://instagram.com" target="_blank">
                 <Instagram
                   size={30}
-                  className="cursor-pointer hover:text-purple"
+                  className="cursor-pointer hover:text-primary"
                 />
               </a>
               <a href="https://linkedin.com" target="_blank">
                 <Linkedin
                   size={30}
-                  className="cursor-pointer hover:text-purple"
+                  className="cursor-pointer hover:text-primary"
                 />
               </a>
               <a href="https://facebook.com" target="_blank">
                 <Facebook
                   size={30}
-                  className="cursor-pointer hover:text-purple"
+                  className="cursor-pointer hover:text-primary"
                 />
               </a>
             </div>

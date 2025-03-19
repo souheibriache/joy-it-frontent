@@ -59,7 +59,7 @@ const OrderDetails = () => {
       </ul>
 
       <Button
-        className="mt-4 bg-purple text-white font-bold"
+        className="mt-4 bg-primary text-white font-bold"
         onClick={handleConfirmPayment}
         disabled={createCheckoutSessionIsLoading}
       >

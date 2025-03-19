@@ -9,11 +9,11 @@ const About = ({}: Props) => {
       <div className="container mx-auto flex flex-col py-24 gap-20">
         <section className="flex flex-row gap-20 ">
           <div className="flex flex-col flex-1 gap-3">
-            <h1 className=" flex flex-row items-center text-3xl font-bold text-purple mb-10 gap-3 uppercase">
-              <div className="w-0 h-0 border-[15px] border-transparent border-l-purple border-r-0"></div>{" "}
+            <h1 className=" flex flex-row items-center text-3xl font-bold text-primary mb-10 gap-3 uppercase">
+              <div className="w-0 h-0 border-[15px] border-transparent border-l-primary border-r-0"></div>{" "}
               À propos de JoyIt
             </h1>
-            <h2 className="text-2xl pl-3 border-l-4 border-purple text-purple font-bold uppercase">
+            <h2 className="text-2xl pl-3 border-l-4 border-primary text-primary font-bold uppercase">
               Notre mission
             </h2>
             <p className="text-2xl  text-justify leading-snug">
@@ -38,30 +38,30 @@ const About = ({}: Props) => {
         </section>
         <section className="flex flex-row text-2xl  gap-20 text-justify">
           <div className="flex flex-col gap-5 flex-1">
-            <h2 className="text-2xl pl-3 border-l-4 border-purple text-purple font-bold uppercase">
+            <h2 className="text-2xl pl-3 border-l-4 border-primary text-primary font-bold uppercase">
               Nos valeurs
             </h2>
 
-            <ul className="list-outside list-disc marker:text-purple ml-10 flex flex-col gap-3">
+            <ul className="list-outside list-disc marker:text-primary ml-10 flex flex-col gap-3">
               <li>
-                <span className="font-bold text-purple">Innovation :</span> Nous
-                innovons en permanence pour offrir les meilleures solutions
+                <span className="font-bold text-primary">Innovation :</span>{" "}
+                Nous innovons en permanence pour offrir les meilleures solutions
                 adaptées aux besoins des entreprises.
               </li>
               <li>
-                <span className="font-bold text-purple">Bien-être :</span> Le
+                <span className="font-bold text-primary">Bien-être :</span> Le
                 bien-être des salariés est au cœur de notre démarche.
               </li>
               <li>
-                <span className="font-bold text-purple">Engagement :</span> Nous
-                accompagnons chaque entreprise avec une attention particulière
-                et un suivi personnalisé.
+                <span className="font-bold text-primary">Engagement :</span>{" "}
+                Nous accompagnons chaque entreprise avec une attention
+                particulière et un suivi personnalisé.
               </li>
             </ul>
           </div>
 
           <div className="flex flex-col gap-5 flex-1">
-            <h2 className="text-2xl pl-3 border-l-4 border-purple text-purple font-bold uppercase">
+            <h2 className="text-2xl pl-3 border-l-4 border-primary text-primary font-bold uppercase">
               Notre vision
             </h2>
 
@@ -75,27 +75,27 @@ const About = ({}: Props) => {
         </section>
         <section className="flex flex-row text-2xl  gap-20 text-justify">
           <div className="flex flex-col gap-5 flex-1">
-            <h2 className="text-2xl pl-3 border-l-4 border-purple text-purple font-bold uppercase">
+            <h2 className="text-2xl pl-3 border-l-4 border-primary text-primary font-bold uppercase">
               Fonctionnement de la Plateforme
             </h2>
 
-            <ul className="list-outside list-disc marker:text-purple ml-10 flex flex-col gap-3">
+            <ul className="list-outside list-disc marker:text-primary ml-10 flex flex-col gap-3">
               <li>
-                <span className="font-bold text-purple">
+                <span className="font-bold text-primary">
                   Abonnements mensuels :
                 </span>{" "}
                 Choisissez le plan qui correspond à votre entreprise et recevez
                 des crédits chaque mois.
               </li>
               <li>
-                <span className="font-bold text-purple">
+                <span className="font-bold text-primary">
                   Crédits flexibles :
                 </span>{" "}
                 Utilisez vos crédits pour réserver des activités, des snacks ou
                 des services bien-être selon vos besoins.
               </li>
               <li>
-                <span className="font-bold text-purple">
+                <span className="font-bold text-primary">
                   Simplicité d’organisation :
                 </span>{" "}
                 Planifiez et gérez tout en quelques clics via une plateforme
@@ -107,31 +107,31 @@ const About = ({}: Props) => {
 
         <section className="flex flex-row text-2xl  gap-20 text-justify">
           <div className="flex flex-col gap-5 flex-1">
-            <h2 className="text-2xl pl-3 border-l-4 border-purple text-purple font-bold uppercase">
+            <h2 className="text-2xl pl-3 border-l-4 border-primary text-primary font-bold uppercase">
               Pourquoi nous choisir ?
             </h2>
 
-            <ul className="list-outside list-disc marker:text-purple ml-10 flex flex-col gap-3">
+            <ul className="list-outside list-disc marker:text-primary ml-10 flex flex-col gap-3">
               <li>
-                <span className="font-bold text-purple">
+                <span className="font-bold text-primary">
                   Une solution clé en main
                 </span>{" "}
                 pour améliorer le bien-être et la cohésion de vos équipes.
               </li>
               <li>
-                <span className="font-bold text-purple">
+                <span className="font-bold text-primary">
                   Un large choix d’activités
                 </span>{" "}
                 variées adaptées à toutes les entreprises et budgets.
               </li>
               <li>
-                <span className="font-bold text-purple">
+                <span className="font-bold text-primary">
                   Une gestion simple
                 </span>{" "}
                 grâce à un tableau de bord intuitif et des crédits flexibles.
               </li>
               <li>
-                <span className="font-bold text-purple">
+                <span className="font-bold text-primary">
                   Un accompagnement personnalisé
                 </span>{" "}
                 pour répondre à vos besoins spécifiques.
@@ -145,7 +145,7 @@ const About = ({}: Props) => {
           page{" "}
           <Link
             to="/contact-us"
-            className="hover:underline font-semibold text-purple"
+            className="hover:underline font-semibold text-primary"
           >
             Nous Contacter.
           </Link>

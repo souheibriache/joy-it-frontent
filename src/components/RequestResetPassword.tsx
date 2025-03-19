@@ -35,7 +35,7 @@ const RequestResetPassword = () => {
           </p>
           <Button
             onClick={() => navigate("/login")}
-            className="bg-purple hover:bg-secondarypurple text-white font-semibold px-6 py-2"
+            className="bg-primary hover:bg-secondary text-white font-semibold px-6 py-2"
           >
             Retour à la connexion
           </Button>
@@ -64,7 +64,7 @@ const RequestResetPassword = () => {
             <Button
               type="submit"
               disabled={isLoading}
-              className="bg-purple hover:bg-secondarypurple text-white font-semibold px-6 py-2"
+              className="bg-primary hover:bg-secondary text-white font-semibold px-6 py-2"
             >
               {isLoading ? "Envoi en cours..." : "Envoyer"}
             </Button>

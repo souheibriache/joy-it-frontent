@@ -20,7 +20,6 @@ import Contact from "./pages/Contact";
 import fetchWithAuth from "./utils/fetchWrapper";
 import Activities from "./pages/Activities";
 import ActivityDetails from "./pages/ActivityDetails";
-import ChatBot from "react-chatbotify";
 import { companyInfo } from "./components/chatBot/info";
 import ChatMessage from "./components/chatBot/ChatMessage";
 import ChatForm from "./components/chatBot/ChatForm";
@@ -110,7 +109,7 @@ function App() {
   }, [chatHistory]);
 
   return (
-    <div>
+    <div className="font-new-order">
       <Header />
       <Routes>
         {/* Public Routes */}
@@ -199,7 +198,7 @@ function App() {
         <Route path="contact-us" element={<Contact />} />
       </Routes>
 
-      <div className={`container ${showChatbot ? "show-chatbot" : ""}`}>
+      <div className={` container ${showChatbot ? "show-chatbot" : ""}`}>
         <button
           onClick={() => setShowChatbot((prev) => !prev)}
           id="chatbot-toggler"
@@ -211,7 +210,7 @@ function App() {
             <X size={30} />
           </span>
         </button>
-        <div className="chatbot-popup">
+        <div className="chatbot-popup z-[100]">
           {/* Chatbot Header */}
           <div className="chat-header">
             <div className="header-info">

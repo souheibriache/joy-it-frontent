@@ -64,7 +64,7 @@ const AccountVerification = () => {
         </h1>
         <Button
           onClick={() => navigate("/login")}
-          className="text-white bg-purple hover:bg-purple-800"
+          className="text-white bg-primary hover:bg-primary-800"
         >
           Retour à la connexion
         </Button>
@@ -84,14 +84,14 @@ const AccountVerification = () => {
       </p>
       <Button
         onClick={handleResendVerification}
-        className="mb-4 text-white bg-purple hover:bg-purple-800"
+        className="mb-4 text-white bg-primary hover:bg-primary-800"
       >
         Renvoyer l'e-mail de vérification
       </Button>
       <Button
         onClick={() => navigate("/login")}
         variant="outline"
-        className="border-purple-600 border-2 border-purple text-purple hover:border-purple-800 hover:text-purple-800"
+        className="border-primary-600 border-2 border-primary text-primary hover:border-primary-800 hover:text-primary-800"
       >
         Retour à la connexion
       </Button>
@@ -114,14 +114,14 @@ const AccountVerification = () => {
       />
       <Button
         onClick={handleResendVerification}
-        className="mb-4 text-white bg-purple hover:bg-purple-800"
+        className="mb-4 text-white bg-primary hover:bg-primary-800"
       >
         Renvoyer l'e-mail de vérification
       </Button>
       <Button
         onClick={() => navigate("/login")}
         variant="outline"
-        className="border-purple-600 border-2 border-purple text-purple hover:border-purple-800 hover:text-purple-800"
+        className="border-primary-600 border-2 border-primary text-primary hover:border-primary-800 hover:text-primary-800"
       >
         Retour à la connexion
       </Button>

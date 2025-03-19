@@ -33,11 +33,11 @@ const ActivityDetails = ({}: Props) => {
         ) : (
           <div className="flex flex-col gap-10">
             <ul className="flex flex-row items-center gap-2">
-              <li className=" text-purple font-bold py-0">Accueil</li>
-              <li className=" px-2 border-l-2 border-purple text-purple font-bold py-0">
+              <li className=" text-primary font-bold py-0">Accueil</li>
+              <li className=" px-2 border-l-2 border-primary text-primary font-bold py-0">
                 {categories(activity?.type)}
               </li>
-              <li className=" px-2 border-l-2 border-purple  font-bold py-0">
+              <li className=" px-2 border-l-2 border-primary  font-bold py-0">
                 {activity?.name}
               </li>
             </ul>
@@ -63,7 +63,7 @@ const ActivityDetails = ({}: Props) => {
               </div>
               <div className="flex-1 flex flex-col gap-10 items-start">
                 <div className="flex flex-col gap-2">
-                  <h1 className="font-bold text-4xl px-2 border-l-4 border-purple text-purple">
+                  <h1 className="font-bold text-4xl px-2 border-l-4 border-primary text-primary">
                     {activity.name}
                   </h1>
                   <p className="flex flex-row gap-2 font-bold">

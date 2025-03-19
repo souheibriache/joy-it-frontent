@@ -1,8 +1,25 @@
-import logo from "../assets/logo.png";
-import { Facebook, Instagram, Linkedin } from "lucide-react";
+import logo from "../assets/logo.svg";
 type Props = {};
+import Instagram from "../assets/icons/instagram.png";
+import Linkedin from "../assets/icons/linkedin.png";
+import { Link, useNavigate } from "react-router-dom";
+import { Mail } from "lucide-react";
 
 const Footer = ({}: Props) => {
+  const navigate = useNavigate();
+
+  const links = [
+    { to: "/activities", label: "Nos services" },
+    { to: "#news", label: "Actualités" },
+    { to: "/about-us", label: "A propos" },
+    { to: "/contact-us", label: "Nous contacter" },
+  ];
+
+  const handleNavigate = (to: string) => {
+    navigate(to);
+    window.scrollTo({ top: 0 });
+  };
+
   return (
     <div className="bg-gray-50 h-full mt-auto bottom-0">
       <div className="container mx-auto flex flex-col items-center justify-between h-full py-20 gap-10">
@@ -12,120 +29,87 @@ const Footer = ({}: Props) => {
         <div className="flex flex-row justify-between w-full">
           <div className="flex flex-col items-start gap-2">
             <div className="flex flex-col items-start gap-1">
-              <h1 className="text-2xl font-semibold text-purple">
-                Nos services
-              </h1>
-              <div className="h-1 w-1/2 bg-purple rounded-full"></div>
-            </div>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Nos teams bulding{" "}
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Nos activités bien-être
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Nos services snack
-            </p>
-          </div>
-
-          <div className="flex flex-col items-start gap-2">
-            <div className="flex flex-col items-start gap-1">
-              <h1 className="text-2xl font-semibold text-purple">Nos blogs</h1>
-              <div className="h-1 w-1/2 bg-purple rounded-full"></div>
-            </div>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Article 1 : 10 idées d’activités{" "}
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Article 2 : Le bien-être au travail
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Article 3 : Les pauses gourmandes
-            </p>
-          </div>
-
-          <div className="flex flex-col items-start gap-2">
-            <div className="flex flex-col items-start gap-1">
-              <h1 className="text-2xl font-semibold text-purple">A propos</h1>
-              <div className="h-1 w-1/2 bg-purple rounded-full"></div>
-            </div>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Qui sommes-nous ?{" "}
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Notre mission
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Rejoignez-nous
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Contactez-nous
-            </p>
-          </div>
-
-          <div className="flex flex-col items-start gap-2">
-            <div className="flex flex-col items-start gap-1">
-              <h1 className="text-2xl font-semibold text-purple">
-                Nous contacter
-              </h1>
-              <div className="h-1 w-1/2 bg-purple rounded-full"></div>
-            </div>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Email : contact@joyit.com{" "}
-            </p>
-            <p className="text-gray-800 hover:underline cursor-pointer">
-              Téléphone : +33 1 23 45 67 89
-            </p>
-          </div>
-
-          <div className="flex flex-col items-start gap-2">
-            <div className="flex flex-col items-start gap-1">
-              <h1 className="text-2xl font-semibold text-purple">
+              <h1 className="text-2xl font-bolota text-primary">
                 Suivez-nous :
               </h1>
-              <div className="h-1 w-1/2 bg-purple rounded-full"></div>
+              <div className="h-1 w-1/2 bg-secondary rounded-full"></div>
             </div>
-            <div className="flex justify-between w-full mt-5">
+            <div className="flex gap-3 w-full mt-5">
               <a href="https://www.instagram.com/joyit.fr/" target="_blank">
-                <Instagram
-                  size={30}
-                  className="cursor-pointer hover:text-purple"
-                />
+                <img src={Instagram} className="h-[30px] w-[30px]" />
               </a>
               <a
                 href="https://www.linkedin.com/company/joyit1/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_companies%3B5mXXNA8FT6ytlCbGdTbtRw%3D%3D"
                 target="_blank"
               >
-                <Linkedin
-                  size={30}
-                  className="cursor-pointer hover:text-purple"
-                />
-              </a>
-              <a href="https://facebook.com" target="_blank">
-                <Facebook
-                  size={30}
-                  className="cursor-pointer hover:text-purple"
-                />
+                <img src={Linkedin} className="h-[30px] w-[30px]" />
               </a>
             </div>
           </div>
+
+          <div className="flex flex-col items-start gap-2">
+            <div className="flex flex-col items-start gap-1">
+              <h1 className="text-2xl font-bolota text-primary">Navigations</h1>
+              <div className="h-1 w-1/2 bg-secondary rounded-full"></div>
+            </div>
+            {links.map((link, index) => (
+              <div
+                key={index}
+                className="text-gray-800 hover:underline cursor-pointer"
+                onClick={() => handleNavigate(link.to)} // Call handleNavigate on click
+              >
+                {link.label}
+              </div>
+            ))}
+          </div>
+
+          <div className="flex flex-col items-start gap-2">
+            <div className="flex flex-col items-start gap-1">
+              <h1 className="text-2xl font-bolota text-primary">
+                Contacter nous
+              </h1>
+              <div className="h-1 w-1/2 bg-secondary rounded-full"></div>
+            </div>
+            <p className="text-gray-800 ">1 rue de la fontaine 75010 Paris</p>
+            <p className="text-gray-800 ">contact@joyit.com</p>
+            <p className="text-gray-800 ">06.32.45.78.21</p>
+          </div>
+
+          <div className="flex flex-col items-start gap-2 justify-self-end">
+            <div className="flex flex-col items-start gap-1">
+              <h1 className="text-2xl font-bolota text-primary w-3/4">
+                Abonnez-vous à notre newsletter
+              </h1>
+              <div className="h-1 w-1/2 bg-secondary rounded-full"></div>
+            </div>
+            <p className="text-gray-800 hover:underline cursor-pointer">
+              ​Abonnez-vous pour recevoir toutes les exclusivités de JoyIt.
+            </p>
+            <form className="flex flex-row p-2 px-3 bg-[#D9D9D9] items-center gap-2 w-[300px] rounded-[5px]">
+              <input
+                type="email"
+                className="bg-transparent border-none outline-none pl-1 w-full"
+              />
+              <Mail />
+            </form>
+          </div>
         </div>
 
-        <div className="flex flex-row items-center justify-between w-full">
-          <h1 className="underline cursor-pointer text-3xl font-bold  text-purple">
-            Mentions légales
-          </h1>
-          <h1 className="underline cursor-pointer text-3xl font-bold  text-purple">
-            Politique de confidentialité
-          </h1>
-          <h1 className="underline cursor-pointer text-3xl font-bold  text-purple">
-            Conditions générales d’utilisation
-          </h1>
-        </div>
-
-        <div className=" text-purple font-semibold text-lg gap-1 flex flex-col items-end w-full">
-          <p>"JoyIt, le bien-être de vos équipes à portée de clic."</p>
-          <p> © 2024 JoyIt. Tous droits réservés.</p>
+        <div className=" text-primary  font-bolota text-lg gap-1 flex flex-row w-full">
+          <div className="flex flex-col items-start  w-full">
+            <h1 className="underline cursor-pointer">Mentions légales</h1>
+            <h1 className="underline cursor-pointer">
+              Politique de confidentialité
+            </h1>
+            <h1 className="underline cursor-pointer">
+              Conditions générales d’utilisation
+            </h1>
+          </div>
+          <div className="flex flex-col gap-2 items-end text-end">
+            <p className="w-full text-nowrap">
+              "JoyIt, le bien-être de vos équipes à portée de clic."
+            </p>
+          </div>
         </div>
       </div>
     </div>

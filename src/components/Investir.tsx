@@ -9,7 +9,7 @@ const Investir = ({}: Props) => {
 
       {/* Content above the wave */}
       <div className="relative z-10 p-8 container mx-auto flex justify-evenly flex-col items-center gap-10">
-        <h1 className="text-4xl font-bold text-center text-purple w-1/2">
+        <h1 className="text-4xl font-bold text-center text-primary w-1/2">
           Pourquoi investir dans le bien-être en entreprise ?
         </h1>
         <div className="flex flex-row w-full items-center justify-between text-center gap-32">

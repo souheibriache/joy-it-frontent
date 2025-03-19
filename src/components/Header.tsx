@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import HeaderLogo from "../assets/header-logo.png";
+import HeaderLogo from "../assets/header-logo.svg";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Bell, ChevronDown, LogOut } from "lucide-react";
@@ -64,32 +64,44 @@ const Header = ({}: Props) => {
         <nav className="flex space-x-6">
           <Link
             to="/activities"
-            className={`text-gray-600 hover:text-gray-900 ${
-              location.pathname.startsWith("/activities") && "font-bold"
+            className={`text-gray-600 hover:text-primary ${
+              location.pathname.startsWith("/activities") &&
+              "font-bold text-primary"
             }`}
           >
             Nos services
           </Link>
           <a
-            href="#blog"
-            className={`text-gray-600 hover:text-gray-900 ${
-              location.pathname.startsWith("/activities") && "font-bold"
+            href="#news"
+            className={`text-gray-600 hover:text-primary ${
+              location.pathname.startsWith("/activities") &&
+              "font-bold text-primary"
             }`}
           >
-            Blog
+            Actualités
           </a>
           <Link
+            to="/order"
+            className={`text-gray-600 hover:text-primary ${
+              location.pathname.startsWith("/order") && "font-bold text-primary"
+            }`}
+          >
+            Abonnements
+          </Link>
+          <Link
             to="/about-us"
-            className={`text-gray-600 hover:text-gray-900 ${
-              location.pathname.startsWith("/about-us") && "font-bold"
+            className={`text-gray-600 hover:text-primary ${
+              location.pathname.startsWith("/about-us") &&
+              "font-bold text-primary"
             }`}
           >
             À Propos
           </Link>
           <Link
             to="/contact-us"
-            className={`text-gray-600 hover:text-gray-900 ${
-              location.pathname.startsWith("/contact-us") && "font-bold"
+            className={`text-gray-600 hover:text-primary ${
+              location.pathname.startsWith("/contact-us") &&
+              "font-bold text-primary"
             }`}
           >
             Nous contacter
@@ -163,7 +175,9 @@ const Header = ({}: Props) => {
                   <h2>{currentUser.userName}</h2>
                   <h1 className="font-normal">{currentCompany?.name}</h1>
                 </div>
-                <ChevronDown />
+                <ChevronDown
+                  className={`duration-200 ${userMenuOpen ? "rotate-180" : ""}`}
+                />
 
                 {userMenuOpen && (
                   <ul className="absolute flex flex-col gap-2 pt-3 bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)] rounded font-normal w-48 left-0 top-full z-10">

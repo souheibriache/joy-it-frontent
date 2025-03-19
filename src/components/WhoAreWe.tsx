@@ -4,9 +4,9 @@ type Props = {};
 const WhoAreWe = ({}: Props) => {
   return (
     <div className="container mx-auto h-[80vh] flex items-center justify-center">
-      <div className="w-1/2 h-1/2 bg-purple bg-opacity-50 rounded-tl-[50px] relative">
+      <div className="w-1/2 h-1/2 bg-primary bg-opacity-50 rounded-tl-[50px] relative">
         <div className="bg-white rounded-[20px] w-2/3 p-16 flex flex-col gap-5 shadow-black/50 shadow-lg b bottom-0 -translate-x-[30px] translate-y-[20px] absolute">
-          <h1 className="font-bold text-3xl text-purple">
+          <h1 className="font-bold text-3xl text-primary">
             Qui somme-nous JoyIt ?
           </h1>
           <p>

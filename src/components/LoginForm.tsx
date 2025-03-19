@@ -63,11 +63,11 @@ const LoginForm = ({}: Props) => {
         <div className="flex flex-row gap-2 items-center">
           <input
             type="checkbox"
-            className="accent-purple h-5 w-5 outline-none"
+            className="accent-primary h-5 w-5 outline-none"
           />
           <p>Se souvenir de moi</p>
         </div>
-        <div className="flex flex-row gap-2 items-center hover:text-purple hover:underline">
+        <div className="flex flex-row gap-2 items-center hover:text-primary hover:underline">
           <Link to="/forgot-password">mot de passe oublié</Link>
         </div>
       </div>
@@ -75,7 +75,7 @@ const LoginForm = ({}: Props) => {
       <Button
         type="submit"
         disabled={isLoading}
-        className="font-semibold z-50 bg-purple hover:bg-secondarypurple text-lg p-5 px-10"
+        className="font-semibold z-20 bg-primary hover:bg-secondary text-lg text-white p-5 px-10"
       >
         {isLoading ? "Connexion en cours..." : "Se connecter"}
       </Button>

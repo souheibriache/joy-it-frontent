@@ -57,7 +57,7 @@ const SignUpForm = ({}: Props) => {
         </p>
         <Button
           onClick={() => navigate("/login")}
-          className="font-semibold bg-purple hover:bg-secondarypurple text-lg p-5 px-10"
+          className="font-semibold bg-primary hover:bg-secondary text-lg p-5 px-10"
         >
           Retour à la connexion
         </Button>
@@ -149,7 +149,7 @@ const SignUpForm = ({}: Props) => {
       <Button
         type="submit"
         disabled={isLoading}
-        className="font-semibold z-50 bg-purple hover:bg-secondarypurple text-lg p-5 px-10"
+        className="font-semibold z-20 bg-primary hover:bg-secondary text-lg text-white p-5 px-10"
       >
         {isLoading ? "S'inscrire..." : "S'inscrire"}
       </Button>

@@ -18,7 +18,7 @@ const PaymentDetails: React.FC = () => {
         <h1 className="text-3xl font-bold text-red-500 mb-4">Payment Failed</h1>
         <p className="text-lg">{error}</p>
         <Button
-          className="mt-6 bg-purple text-white px-6 py-2 rounded-md"
+          className="mt-6 bg-primary text-white px-6 py-2 rounded-md"
           onClick={() => (window.location.href = "/plans")}
         >
           Go Back to Plans
@@ -62,7 +62,7 @@ const PaymentDetails: React.FC = () => {
       </div>
 
       <Button
-        className="mt-6 bg-purple text-white px-6 py-2 rounded-md"
+        className="mt-6 bg-primary text-white px-6 py-2 rounded-md"
         onClick={() => (window.location.href = "/plans")}
       >
         Back to Plans

@@ -44,8 +44,8 @@ const Activities = ({}: Props) => {
   return (
     <>
       <div className="container mx-auto py-20 flex flex-col gap-5">
-        <h1 className=" flex flex-row items-center text-3xl font-bold text-purple mb-10 gap-3 uppercase">
-          <div className="w-0 h-0 border-[15px] border-transparent border-l-purple border-r-0"></div>{" "}
+        <h1 className=" flex flex-row items-center text-3xl font-bold text-primary mb-10 gap-3 uppercase">
+          <div className="w-0 h-0 border-[15px] border-transparent border-l-primary border-r-0"></div>{" "}
           Nos activités
         </h1>
 

@@ -70,7 +70,7 @@ const Order = () => {
 
   return (
     <div className="flex flex-col w-full h-[calc(100vh-100px)] items-center container mx-auto py-10 gap-10">
-      <h1 className="text-4xl text-purple font-bold border-l-purple">
+      <h1 className="text-4xl text-primary font-bold border-l-primary">
         Prêt à commencer l’aventure avec Joy-it !
       </h1>
       <p className="text-lg font-semibold text-foreground">
@@ -81,7 +81,7 @@ const Order = () => {
       <div className="flex flex-row gap-16 items-center justify-center">
         <form className="flex flex-col gap-10" action="">
           <div className="flex flex-col gap-1">
-            <label htmlFor="" className="font-semibold text-xl text-purple">
+            <label htmlFor="" className="font-semibold text-xl text-primary">
               Nombres d’employés*
             </label>
 
@@ -99,7 +99,7 @@ const Order = () => {
             </div>
           </div>
 
-          <h3 className="font-semibold text-xl text-purple">
+          <h3 className="font-semibold text-xl text-primary">
             Services souhaités*
           </h3>
 
@@ -107,7 +107,7 @@ const Order = () => {
             <div className="flex flex-col gap-4">
               <div className="flex flex-row items-center gap-2">
                 <input
-                  className="accent-purple w-4 h-4"
+                  className="accent-primary w-4 h-4"
                   type="checkbox"
                   name="snacking"
                   checked={snacking}
@@ -120,7 +120,7 @@ const Order = () => {
 
               {snacking && (
                 <div className="flex flex-col gap-0.5">
-                  <label htmlFor="" className="font-semibold  text-purple">
+                  <label htmlFor="" className="font-semibold  text-primary">
                     Fréquence des activités Snack (Par mois)
                   </label>
 
@@ -145,7 +145,7 @@ const Order = () => {
             <div className="flex flex-col gap-4">
               <div className="flex flex-row items-center gap-2">
                 <input
-                  className="accent-purple w-4 h-4"
+                  className="accent-primary w-4 h-4"
                   type="checkbox"
                   name="well_being"
                   checked={wellBeing}
@@ -157,7 +157,7 @@ const Order = () => {
               </div>
               {wellBeing && (
                 <div className="flex flex-col gap-0.5">
-                  <label htmlFor="" className="font-semibold  text-purple">
+                  <label htmlFor="" className="font-semibold  text-primary">
                     Fréquence des activités Bien-être (Par mois)
                   </label>
                   <div className="flex flex-row gap-2 items-baseline">
@@ -183,7 +183,7 @@ const Order = () => {
                 <label htmlFor="team_building" className="">
                   Pour programmer des activités de team building, veuillez{" "}
                   <Link
-                    className="font-semibold text-purple underline"
+                    className="font-semibold text-primary underline"
                     to="/contact-us"
                   >
                     {" "}
@@ -198,11 +198,11 @@ const Order = () => {
         </form>
 
         <div className="flex items-center justify-start h-full flex-col gap-5 ">
-          <div className="flex flex-col p-24 border-4 border-purple rounded-[15px] items-center text-center gap-5 self-start">
+          <div className="flex flex-col p-24 border-4 border-primary rounded-[15px] items-center text-center gap-5 self-start">
             <h1 className="font-bold text-2xl">Montant total</h1>
 
             {isLoading ? (
-              <Loader color="purple" />
+              <Loader color="primary" />
             ) : error ? (
               <p className="text-red-500">Erreur lors du calcul</p>
             ) : (
@@ -216,7 +216,7 @@ const Order = () => {
 
           <Button
             variant="outline"
-            className="w-fit border-purple text-purple font-bold group"
+            className="w-fit border-primary text-primary font-bold group"
             onClick={handleSubmit}
             disabled={isLoadingCreateOrder}
           >
