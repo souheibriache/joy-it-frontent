@@ -2,7 +2,7 @@ import logo from "../assets/logo.svg";
 type Props = {};
 import Instagram from "../assets/icons/instagram.png";
 import Linkedin from "../assets/icons/linkedin.png";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Mail } from "lucide-react";
 
 const Footer = ({}: Props) => {
@@ -88,6 +88,7 @@ const Footer = ({}: Props) => {
             <form className="flex flex-row p-2 px-3 bg-[#D9D9D9] items-center gap-2 w-[300px] rounded-[5px]">
               <input
                 type="email"
+                placeholder="Email"
                 className="bg-transparent border-none outline-none pl-1 w-full"
               />
               <Mail />
