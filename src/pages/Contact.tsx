@@ -19,7 +19,7 @@ const Contact = ({}: Props) => {
       <div className="flex flex-col relative">
         <div className="w-full top-0  gap-10 relative">
           <div className="bg-[url(/src/assets/landingpage_background.png)] bg-cover bg-center w-full flex flex-col gap-10 p-20 h-[50vh]">
-            <ul className="flex flex-row items-center gap-2 container mx-auto">
+            <ul className="flex flex-row items-center gap-2 container mx-auto uppercase">
               <li className=" text-white font-bold py-0">Accueil</li>
               <li className=" text-white font-bold py-0 border-l-2 border-white pl-2">
                 Nous contacter
@@ -27,7 +27,9 @@ const Contact = ({}: Props) => {
             </ul>
 
             <div className="flex flex-col items-center justify-center gap-10 text-white">
-              <h1 className="text-4xl font-bold uppercase">Nous CONTACTER</h1>
+              <h1 className="text-4xl font-bold uppercase font-bolota">
+                Nous CONTACTER
+              </h1>
               <p className=" text-xl">
                 Une question, un projet ou une collaboration ?{" "}
                 <span className="font-bold">Contactez-nous</span>, notre équipe

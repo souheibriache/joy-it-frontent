@@ -56,7 +56,7 @@ const Footer = ({}: Props) => {
               <div
                 key={index}
                 className="text-gray-800 hover:underline cursor-pointer"
-                onClick={() => handleNavigate(link.to)} // Call handleNavigate on click
+                onClick={() => handleNavigate(link.to)}
               >
                 {link.label}
               </div>

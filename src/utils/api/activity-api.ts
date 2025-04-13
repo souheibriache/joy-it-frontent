@@ -2,9 +2,9 @@ import { useQuery } from "react-query";
 import fetchWithAuth from "../fetchWrapper";
 import { toast } from "sonner";
 import { serializeQuery } from "../mathods";
-import { ActivityOptionsDto } from "@/types/activity";
+import { TemplateOptionsDto } from "@/types/activity";
 
-export const useGetPaginatedActivities = (options: ActivityOptionsDto) => {
+export const useGetPaginatedActivities = (options: TemplateOptionsDto) => {
   const getPaginatedActivitiesRequest = async () => {
     const params = serializeQuery(options);
     return await fetchWithAuth(`/activities?${params}`, { method: "GET" });

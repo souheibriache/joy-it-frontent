@@ -1,7 +1,7 @@
 import { ActivityFilter } from "@/components/ActivirtFilter";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ActivityFilterDto, ActivityOptionsDto } from "@/types/activity";
+import { ActivityFilterDto, TemplateOptionsDto } from "@/types/activity";
 import { useGetPaginatedActivities } from "@/utils/api/activity-api";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
@@ -13,7 +13,7 @@ const Activities = ({}: Props) => {
   const [filters, setFilters] = useState<ActivityFilterDto>({});
   const [showFilters, setShowFilters] = useState(false);
 
-  const [pagination, setPagination] = useState<ActivityOptionsDto>({
+  const [pagination, setPagination] = useState<TemplateOptionsDto>({
     page: 1,
     take: 10,
     query: filters,

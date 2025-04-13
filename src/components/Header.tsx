@@ -71,15 +71,14 @@ const Header = ({}: Props) => {
           >
             Nos services
           </Link>
-          <a
-            href="#news"
+          <Link
+            to="/blog"
             className={`text-gray-600 hover:text-primary ${
-              location.pathname.startsWith("/activities") &&
-              "font-bold text-primary"
+              location.pathname.startsWith("/blog") && "font-bold text-primary"
             }`}
           >
             Actualités
-          </a>
+          </Link>
           <Link
             to="/order"
             className={`text-gray-600 hover:text-primary ${

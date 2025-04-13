@@ -1,5 +1,5 @@
 import { Route, Routes, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Header from "./components/Header";
@@ -25,13 +25,29 @@ import ChatMessage from "./components/chatBot/ChatMessage";
 import ChatForm from "./components/chatBot/ChatForm";
 import ChatBotIcon from "./components/chatBot/ChatBotIcon";
 import { X } from "lucide-react";
-
+import Blog from "./pages/Blog";
+import ArticleDetails from "./pages/ArticleDetails";
+import Cookies from "js-cookie";
+import { signInSuccess } from "./redux/auth/auth-slice";
 function App() {
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const { currentCompany } = useSelector((state: RootState) => state.company);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useFetchCompany();
+
+  useEffect(() => {
+    // Read the tokens from the shared cookies
+    const accessToken = Cookies.get("accessToken");
+    const refreshToken = Cookies.get("refreshToken");
+
+    if (accessToken) {
+      dispatch(
+        signInSuccess({ accessToken, refreshToken: refreshToken || null })
+      );
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (accessToken) {
@@ -191,6 +207,9 @@ function App() {
         />
 
         <Route path="/activities" element={<Activities />} />
+        <Route path="/blog" element={<Blog />} />
+
+        <Route path="/blog/:articleId" element={<ArticleDetails />} />
 
         <Route path="/activities/:activityId" element={<ActivityDetails />} />
 
@@ -231,7 +250,9 @@ function App() {
                 <ChatBotIcon />
               </div>
               <p className="message-text">
-                Hey there <br /> How can I help you today?
+                Bonjour,
+                <br />
+                Comment puis-je vous aider aujourd'hui ?
               </p>
             </div>
             {/* Render the chat history dynamically */}

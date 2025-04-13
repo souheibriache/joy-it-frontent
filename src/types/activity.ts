@@ -37,7 +37,7 @@ export type ActivityFilterDto = {
   isAvailable?: boolean;
 };
 
-export type ActivityOptionsDto = {
+export type TemplateOptionsDto = {
   page: number;
   take: number;
   query?: any; // Filtering options

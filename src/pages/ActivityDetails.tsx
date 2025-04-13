@@ -45,7 +45,7 @@ const ActivityDetails = ({}: Props) => {
             <div className="flex flex-row gap-20">
               <div className="flex-1 flex flex-col gap-5">
                 <img
-                  className="w-full aspect-square object-cover rounded drop-shadow-xl shadow-black"
+                  className="w-full aspect-square object-cover  rounded drop-shadow-xl shadow-black"
                   src={mainImage?.fullUrl}
                   alt=""
                 />
@@ -55,7 +55,9 @@ const ActivityDetails = ({}: Props) => {
                   {activity.images.map((image: any) => (
                     <img
                       onClick={() => setMainImage(image)}
-                      className="aspect-square object-cover hover:scale-[102%] duration-150 cursor-pointer rounded drop-shadow"
+                      className={`aspect-square object-cover hover:scale-[102%] max-w-[${
+                        (activity?.images?.length / 4) * 100
+                      }%] duration-150 cursor-pointer rounded drop-shadow`}
                       src={image.fullUrl}
                     />
                   ))}
