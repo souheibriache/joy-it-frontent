@@ -50,8 +50,21 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
+    const cookieAccessToken = Cookies.get("accessToken");
+    const cookieRrefreshToken = Cookies.get("refreshToken");
+
     if (accessToken) {
-      const decoded: any = jwtDecode(accessToken);
+      if (cookieAccessToken && cookieAccessToken)
+        dispatch(
+          signInSuccess({
+            accessToken: cookieAccessToken,
+            refreshToken: cookieRrefreshToken || null,
+          })
+        );
+
+      const decoded: any = accessToken
+        ? jwtDecode(accessToken)
+        : jwtDecode(cookieAccessToken!);
 
       const expired = decoded.iat * 1000 < Date.now();
       if (expired) {

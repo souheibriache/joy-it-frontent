@@ -55,6 +55,8 @@ const authSlice = createSlice({
       state.error = false;
       state.accessToken = null;
       state.refreshToken = null;
+      Cookies.remove("accessToken");
+      Cookies.remove("refreshToken");
     },
   },
 });
