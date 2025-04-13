@@ -29,6 +29,7 @@ import Blog from "./pages/Blog";
 import ArticleDetails from "./pages/ArticleDetails";
 import Cookies from "js-cookie";
 import { signInSuccess } from "./redux/auth/auth-slice";
+import { fetchCurrentUser } from "./utils/api/user-api";
 function App() {
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const { currentCompany } = useSelector((state: RootState) => state.company);
@@ -61,7 +62,7 @@ function App() {
             refreshToken: cookieRrefreshToken || null,
           })
         );
-        fetchWithAuth("/accounts/profile");
+        fetchCurrentUser();
       }
 
       const decoded: any = accessToken
