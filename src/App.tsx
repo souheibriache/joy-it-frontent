@@ -54,13 +54,15 @@ function App() {
     const cookieRrefreshToken = Cookies.get("refreshToken");
 
     if (accessToken) {
-      if (cookieAccessToken && cookieAccessToken)
+      if (cookieAccessToken && cookieAccessToken) {
         dispatch(
           signInSuccess({
             accessToken: cookieAccessToken,
             refreshToken: cookieRrefreshToken || null,
           })
         );
+        fetchWithAuth("/accounts/profile");
+      }
 
       const decoded: any = accessToken
         ? jwtDecode(accessToken)
@@ -81,7 +83,7 @@ function App() {
         navigate("/create-company");
       }
     }
-  }, [accessToken, navigate, currentCompany]);
+  }, [accessToken, navigate, dispatch, currentCompany]);
 
   const chatBodyRef: any = useRef();
   const [showChatbot, setShowChatbot] = useState(false);
