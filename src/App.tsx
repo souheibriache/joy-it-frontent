@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Header from "./components/Header";
 import Auth from "./pages/Auth";
-import { RootState } from "./redux/store"; // Adjust the path to your store
+import { AppDispatch, RootState } from "./redux/store"; // Adjust the path to your store
 import VerificationNotification from "./components/VerificationNotification";
 import { useFetchCompany } from "./utils/api/company-api";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -34,7 +34,7 @@ function App() {
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const { currentCompany } = useSelector((state: RootState) => state.company);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   useFetchCompany();
 
@@ -62,7 +62,7 @@ function App() {
             refreshToken: cookieRrefreshToken || null,
           })
         );
-        fetchCurrentUser();
+        dispatch(fetchCurrentUser());
       }
 
       const decoded: any = accessToken
