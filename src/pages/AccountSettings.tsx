@@ -7,7 +7,6 @@ import {
   Loader2,
   Lock,
   Pencil,
-  Save,
   UserIcon,
   X,
 } from "lucide-react";

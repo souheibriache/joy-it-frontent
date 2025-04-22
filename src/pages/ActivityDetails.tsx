@@ -1,6 +1,6 @@
 import { useGetActivityById } from "@/utils/api/activity-api";
 import { categories } from "@/utils/enums";
-import { CalendarIcon, Clock, Loader } from "lucide-react";
+import { CalendarIcon, Loader } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import StarIcon from "../assets/icons/StarIcon.svg";

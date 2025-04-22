@@ -1,14 +1,13 @@
 import CallendarComponent from "@/components/CallendarComponent";
 import { RootState } from "@/redux/store";
 import { Heart } from "lucide-react";
-import React from "react";
 import ClientSpaceSvg from "../assets/client-space.svg";
 import { useSelector } from "react-redux";
-import { Schedule, useGetAllSchedules } from "@/utils/api/schedule-api";
+import { useGetAllSchedules } from "@/utils/api/schedule-api";
 
 type Props = {};
 
-const Reservations = (props: Props) => {
+const Reservations = ({}: Props) => {
   const { data: schedules } = useGetAllSchedules();
 
   const { currentCompany } = useSelector((state: RootState) => state.company);

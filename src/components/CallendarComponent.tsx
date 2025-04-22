@@ -12,35 +12,6 @@ import { normalize } from "@/utils/mathods";
 import { Schedule } from "@/utils/api/schedule-api";
 import { ScheduleStatusEnum } from "@/types/schedule";
 
-// Custom navigation for the calendar
-const CustomNavigation = ({
-  onPrevClick,
-  onNextClick,
-  label,
-}: {
-  onPrevClick: () => void;
-  onNextClick: () => void;
-  label: string;
-}) => (
-  <div className="flex items-center justify-between mb-4 px-2">
-    <div className="text-teal-800 font-medium">{label}</div>
-    <div className="flex gap-4">
-      <button
-        onClick={onPrevClick}
-        className="text-gray-400 hover:text-teal-800 transition-colors"
-      >
-        <ChevronLeft size={20} />
-      </button>
-      <button
-        onClick={onNextClick}
-        className="text-gray-400 hover:text-teal-800 transition-colors"
-      >
-        <ChevronRight size={20} />
-      </button>
-    </div>
-  </div>
-);
-
 declare type Props = {
   reservations?: Schedule[];
 };
@@ -60,7 +31,6 @@ const CalendarComponent = ({ reservations }: Props) => {
   );
 
   const selectedTs = normalize(selectedDate);
-  const todayTs = normalize(new Date());
 
   // Get color for event card
   const getEventColor = (status: ScheduleStatusEnum): string => {
@@ -80,7 +50,7 @@ const CalendarComponent = ({ reservations }: Props) => {
   };
 
   // Format date to French locale
-  const formatMonthYear = (locale: string, date: Date) => {
+  const formatMonthYear = (date: Date) => {
     return date.toLocaleDateString("fr-FR", {
       month: "long",
       year: "numeric",
@@ -104,12 +74,13 @@ const CalendarComponent = ({ reservations }: Props) => {
             }
             value={selectedDate}
             className="custom-calendar border-none shadow-none"
-            navigationLabel={({ date }) => formatMonthYear("fr-FR", date)}
-            formatShortWeekday={(locale, date) =>
-              date
+            navigationLabel={({ date }) => formatMonthYear(date)}
+            formatShortWeekday={(locale, date) => {
+              locale;
+              return date
                 .toLocaleDateString("fr-FR", { weekday: "short" })
-                .substring(0, 3)
-            }
+                .substring(0, 3);
+            }}
             next2Label={null}
             prev2Label={null}
             nextLabel={<ChevronRight size={16} />}

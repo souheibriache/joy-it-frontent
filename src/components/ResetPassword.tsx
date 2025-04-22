@@ -2,22 +2,29 @@ import React, { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useResetPassword } from "@/utils/api/user-api";
 import { Button } from "@/components/ui/button";
-import { Lock } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import { Label } from "./ui/label";
+import { Input } from "./ui/input";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { mutateAsync: resetPassword, isLoading } = useResetPassword();
+  const { mutateAsync: resetPassword, error } = useResetPassword();
   const token = searchParams.get("token");
-
   const [formData, setFormData] = useState({
     password: "",
     confirmPassword: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,48 +47,65 @@ const ResetPassword = () => {
     }
   };
 
+  if (error) {
+    return (
+      <Card className="w-[400px]">
+        <CardHeader>
+          <CardTitle className="text-2xl text-center text-destructive">
+            Erreur
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="text-center">
+          <p className="mb-4">{error.message}</p>
+          <Button
+            className="text-white"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Demander un nouveau lien
+          </Button>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
-    <div className="flex flex-col items-center justify-center h-[calc(100vh-100px)] gap-5">
-      <h1 className="text-2xl font-bold">Réinitialiser le mot de passe</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center gap-4"
-      >
-        <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
-          <Lock />
-          <input
-            type="password"
-            name="password"
-            placeholder="Nouveau mot de passe"
-            value={formData.password}
-            onChange={handleChange}
-            className="border-none outline-none w-full"
-            required
-          />
-        </div>
-
-        <div className="flex flex-row items-center border border-gray-600 text-gray-500 gap-2 p-4 rounded-lg w-96">
-          <Lock />
-          <input
-            type="password"
-            name="confirmPassword"
-            placeholder="Confirmer le mot de passe"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            className="border-none outline-none w-full"
-            required
-          />
-        </div>
-
-        <Button
-          type="submit"
-          disabled={isLoading}
-          className="bg-primary hover:bg-secondary text-white font-semibold px-6 py-2"
-        >
-          {isLoading ? "Réinitialisation en cours..." : "Réinitialiser"}
-        </Button>
-      </form>
-    </div>
+    <Card className="w-[400px]">
+      <CardHeader>
+        <CardTitle className="text-2xl text-center">
+          Réinitialiser le mot de passe
+        </CardTitle>
+        <CardDescription className="text-center">
+          Créez un nouveau mot de passe pour votre compte
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="password">Nouveau mot de passe</Label>
+            <Input
+              id="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+            <Input
+              id="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <Button type="submit" className="w-full text-white">
+            Réinitialiser le mot de passe
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

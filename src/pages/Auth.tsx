@@ -35,7 +35,7 @@ const Auth = ({}: Props) => {
   return (
     <div className="overflow-hidden relative h-[calc(100vh-100px)] w-full">
       <div className="container mx-auto flex flex-row h-full">
-        <div className="flex flex-col justify-evenly flex-1 items-center p-40 py-32 relative -translate-x-24 ">
+        <div className=" flex-col hidden lg:flex justify-evenly flex-1 items-center p-40 py-32 relative -translate-x-24 ">
           <img src={logo} className="h-32" />
           <h1 className="text-3xl font-bold text-primary text-nowrap">
             Rejoignez-nous en quelques clics !
