@@ -30,11 +30,15 @@ import ArticleDetails from "./pages/ArticleDetails";
 import Cookies from "js-cookie";
 import { signInSuccess } from "./redux/auth/auth-slice";
 import { fetchCurrentUser } from "./utils/api/user-api";
+import { Button } from "./components/ui/button";
+import AccountSettings from "./pages/AccountSettings";
+import Reservations from "./pages/Reservations";
 function App() {
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const { currentCompany } = useSelector((state: RootState) => state.company);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const [cookiesVisible, setCookiesVisible] = useState(false);
 
   useFetchCompany();
 
@@ -140,8 +144,18 @@ function App() {
     });
   }, [chatHistory]);
 
+  setTimeout(() => {
+    const cookies = Cookies.get("cookies-usage");
+    if (!cookies) setCookiesVisible(true);
+  }, 3000);
+
+  const handleCookies = () => {
+    setCookiesVisible(false);
+    Cookies.set("cookies-usage", "true");
+  };
+
   return (
-    <div className="font-new-order">
+    <div className="font-new-order relative h-[100vh] flex flex-col">
       <Header />
       <Routes>
         {/* Public Routes */}
@@ -207,6 +221,24 @@ function App() {
           }
         />
 
+        <Route
+          path="/my-account"
+          element={
+            <ProtectedRoute>
+              <AccountSettings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/my-reservations"
+          element={
+            <ProtectedRoute>
+              <Reservations />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/" element={<LandingPage />} />
 
         <Route
@@ -250,7 +282,7 @@ function App() {
           <div className="chat-header">
             <div className="header-info">
               <ChatBotIcon />
-              <h2 className="logo-text">Chatbot</h2>
+              <h2 className="logo-text">Joy-bot</h2>
             </div>
             <button
               onClick={() => setShowChatbot((prev) => !prev)}
@@ -284,6 +316,36 @@ function App() {
               generateBotResponse={generateBotResponse}
             />
           </div>
+        </div>
+      </div>
+      <div
+        className={`fixed w-full bg-primary bottom-0 py-10 duration-500 translate-y-[30vh] ${
+          cookiesVisible ? "translate-y-0" : ""
+        }`}
+      >
+        <div className="container mx-auto flex flex-row justify-between items-center gap-20">
+          <div className="flex flex-col text-white gap-4 text-xl">
+            <p>
+              <strong>Nous utilisons des cookies.</strong> Chez Joy‑It, nous
+              utilisons des cookies (et technologies similaires) pour améliorer
+              votre expérience de navigation, mémoriser vos préférences et
+              analyser le trafic de notre site.
+            </p>
+            <p>
+              En cliquant sur <em>« Tout accepter »</em>, vous consentez à notre
+              utilisation des cookies. Consultez notre{" "}
+              <a href="/politique-de-cookies">Politique de cookies</a> ou gérez
+              vos paramètres à tout moment via le lien{" "}
+              <strong>Paramètres des cookies</strong> en pied de page.
+            </p>
+          </div>
+
+          <Button
+            onClick={handleCookies}
+            className="text-nowrap bg-secondary hover:bg-opacity-100 bg-opacity-80 hover:bg-secondary text-white text-lg"
+          >
+            Tout accepter{" "}
+          </Button>
         </div>
       </div>
     </div>

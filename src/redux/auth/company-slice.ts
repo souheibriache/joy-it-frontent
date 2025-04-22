@@ -8,6 +8,7 @@ export type CompanyState = {
     postalCode: string;
     city: string;
     phoneNumber: string;
+    siretNumber: string;
     employeesNumber: number;
     logo: { fullUrl: string } | null;
     subscription: { id: string } | null;

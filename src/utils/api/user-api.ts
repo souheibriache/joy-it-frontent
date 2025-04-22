@@ -12,6 +12,7 @@ import {
   fetchUserSuccess,
 } from "@/redux/auth/user-slice";
 import fetchWithAuth from "../fetchWrapper";
+import { useState } from "react";
 
 export const useLoginUser = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -279,4 +280,67 @@ export const useResetPassword = () => {
       );
     },
   });
+};
+
+export const useUpdateUserProfile = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+
+  const updateUserProfile = async (data: {
+    firstName: string;
+    lastName: string;
+    userName: string;
+  }) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetchWithAuth("/accounts/profile", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      toast.success("Profil utilisateur mis à jour avec succès.");
+      return res;
+    } catch (err) {
+      setError(err);
+      toast.error("Échec de la mise à jour du profil utilisateur.");
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { updateUserProfile, loading, error };
+};
+
+export const useUpdatePassword = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<any>(null);
+
+  const updatePassword = async (data: {
+    oldPassword: string;
+    newPassword: string;
+  }) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetchWithAuth("/accounts/update-password", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      toast.success("Mot de passe mis à jour avec succès.");
+      return res;
+    } catch (err) {
+      setError(err);
+      toast.error(error.message || "Échec de la mise à jour du mot de passe.");
+
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { updatePassword, loading, error };
 };

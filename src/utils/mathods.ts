@@ -22,3 +22,5 @@ export const serializeQuery = (obj: any, prefix = ""): string => {
   }
   return str.join("&");
 };
+
+export const normalize = (d: Date) => new Date(d).setHours(0, 0, 0, 0);

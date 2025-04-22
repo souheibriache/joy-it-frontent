@@ -31,6 +31,7 @@ export default {
         primary: "#13534B",
         secondary: "#A4C84F",
         beige: "#F6EADB",
+        orange: "#FFAA94",
         joyitbg: "#F5F5F5",
         secondaryred:"#E20716",
         lightred: "#F8A5C1",

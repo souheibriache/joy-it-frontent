@@ -64,7 +64,7 @@ const AccountVerification = () => {
         </h1>
         <Button
           onClick={() => navigate("/login")}
-          className="text-white bg-primary hover:bg-primary-800"
+          className="text-white bg-primary hover:bg-primary-800 text-white"
         >
           Retour à la connexion
         </Button>

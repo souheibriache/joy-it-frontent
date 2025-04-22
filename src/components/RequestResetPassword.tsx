@@ -35,7 +35,7 @@ const RequestResetPassword = () => {
           </p>
           <Button
             onClick={() => navigate("/login")}
-            className="bg-primary hover:bg-secondary text-white font-semibold px-6 py-2"
+            className="bg-primary hover:bg-secondary text-white font-semibold px-6 py-2 text-white"
           >
             Retour à la connexion
           </Button>

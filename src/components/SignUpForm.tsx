@@ -57,7 +57,7 @@ const SignUpForm = ({}: Props) => {
         </p>
         <Button
           onClick={() => navigate("/login")}
-          className="font-semibold bg-primary hover:bg-secondary text-lg p-5 px-10"
+          className="font-semibold bg-primary hover:bg-secondary text-lg p-5 px-10 text-white"
         >
           Retour à la connexion
         </Button>

@@ -41,7 +41,7 @@ const authSlice = createSlice({
       Cookies.set("refreshToken", state.refreshToken!, {
         domain: ".joy-it.fr",
         path: "/",
-        expires: 1,
+        expires: 7,
       });
     },
     signInFailure(state, action: PayloadAction<any>) {

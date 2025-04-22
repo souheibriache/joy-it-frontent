@@ -19,6 +19,7 @@ export interface CreateCompanyDto {
   address: string;
   postalCode: string;
   city: string;
+  siretNumber: string;
   phoneNumber: string;
   employeesNumber: number;
 }
