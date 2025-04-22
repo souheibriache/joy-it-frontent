@@ -40,6 +40,8 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
   const [cookiesVisible, setCookiesVisible] = useState(false);
 
+  const baseUrl = import.meta.env.VITE_API_URL;
+  console.log({ baseUrl });
   useFetchCompany();
 
   useEffect(() => {
