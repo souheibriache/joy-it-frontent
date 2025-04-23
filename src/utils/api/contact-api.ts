@@ -96,7 +96,7 @@ export const useSubmitSupportUser = () => {
     form.append("subject", payload.subject);
 
     // fetchWithAuth should internally add the Authorization header
-    const res = await fetchWithAuth(`${API_BASE_URL}/support/user`, {
+    const res = await fetchWithAuth(`/support/user`, {
       method: "POST",
       body: form,
     });

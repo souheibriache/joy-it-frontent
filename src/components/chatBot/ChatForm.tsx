@@ -18,7 +18,7 @@ const ChatForm = ({
     setTimeout(() => {
       setChatHistory((history: any) => [
         ...history,
-        { role: "model", text: "Thinking..." },
+        { role: "model", text: "Chargement..." },
       ]);
       generateBotResponse([
         ...chatHistory,
