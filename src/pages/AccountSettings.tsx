@@ -177,9 +177,8 @@ const AccountSettings = () => {
     <div className="flex flex-col  bg-gray-50">
       {/* Top Header */}
       <div
-        className="bg-gradient-to-r from-teal-700 to-teal-600 w-full py-8 px-4 sm:px-6 lg:px-8 mb-6"
+        className="bg-gradient-to-r bg-[url(/src/assets/landingpage_background.png)] from-teal-700 to-teal-600 w-full py-8 px-4 sm:px-6 lg:px-8 mb-6"
         style={{
-          backgroundImage: "url(/src/assets/landingpage_background.png)",
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
