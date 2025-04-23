@@ -1,6 +1,17 @@
+"use client";
+
 import { useGetActivityById } from "@/utils/api/activity-api";
 import { categories } from "@/utils/enums";
-import { CalendarIcon, Loader } from "lucide-react";
+import {
+  CalendarIcon,
+  CheckCircle,
+  Clock,
+  Info,
+  Loader,
+  MapPin,
+  Tag,
+  Users,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import StarIcon from "../assets/icons/StarIcon.svg";
@@ -17,14 +28,23 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { addDays, format, startOfDay } from "date-fns";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
 import { TimePicker24 } from "@/components/ui/TimePicker24";
+import { useFetchCompany } from "@/utils/api/company-api";
+import { Badge } from "@/components/ui/badge";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { fr } from "date-fns/locale";
+import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCompanySuccess } from "@/redux/auth/company-slice";
 
-type Props = {};
-
-const ActivityDetails = ({}: Props) => {
-  const { currentCompany } = useSelector((state: RootState) => state.company);
+const ActivityDetails = () => {
   const { activityId } = useParams<{ activityId: string }>();
   const [mainImage, setMainImage] = useState<any>();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
@@ -32,12 +52,17 @@ const ActivityDetails = ({}: Props) => {
   const maxSelectable = addDays(today, 2);
   const [selectedTime, setSelectedTime] = useState<string>("12:00");
   const [participants, setParticipants] = useState<number>(1);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState<Date | null>(null);
+
+  const dispatch = useDispatch();
+  const { currentCompany } = useSelector((state: any) => state.company);
 
   const { activity, isLoading: isFetching } = useGetActivityById(
     activityId || ""
   );
 
-  const createSchedule = useCreateSchedule();
+  const { mutate: createSchedule, isLoading } = useCreateSchedule();
 
   useEffect(() => {
     if (activity) {
@@ -47,181 +72,423 @@ const ActivityDetails = ({}: Props) => {
     }
   }, [activity]);
 
+  const { fetchCompany } = useFetchCompany();
+
   const handleSchedule = () => {
-    if (!selectedDate) return;
+    if (!selectedDate) {
+      toast.error("Veuillez sélectionner une date");
+      return;
+    }
+
     const dt = new Date(selectedDate);
     const [h, m] = selectedTime.split(":").map(Number);
     dt.setHours(h, m, 0, 0);
+    setScheduledDate(dt);
 
-    createSchedule.mutate(
+    createSchedule(
       { activityId: activityId!, date: dt.toISOString(), participants },
       {
         onSuccess: () => {
-          toast.success("Planning créé avec succès !");
+          toast.success("Réservation créée avec succès !");
+          setBookingSuccess(true);
+
+          // Update Redux store with new booking data
+          fetchCompany().then((companyData: any) => {
+            if (companyData) {
+              dispatch(fetchCompanySuccess(companyData));
+            }
+          });
         },
         onError: (err: any) => {
-          toast.error(err.message);
+          toast.error(err.message || "Une erreur est survenue");
         },
       }
     );
   };
 
+  const renderBookingForm = () => (
+    <Card className="shadow-lg border-t-4 border-t-primary">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xl">Réserver cette activité</CardTitle>
+        <CardDescription>
+          Choisissez une date et un horaire pour votre réservation
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Date picker */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Date</label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="w-full justify-start text-left font-normal"
+              >
+                <CalendarIcon className="mr-2 h-4 w-4" />
+                {selectedDate ? (
+                  format(selectedDate, "dd MMMM yyyy", { locale: fr })
+                ) : (
+                  <span>Sélectionner une date</span>
+                )}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                initialFocus
+                mode="single"
+                locale={fr}
+                disabled={(date) => {
+                  const day = date.getDay();
+                  return (
+                    date < maxSelectable ||
+                    date > new Date("2100-1-1") ||
+                    day === 0 ||
+                    day === 6
+                  );
+                }}
+                selected={selectedDate}
+                onSelect={(date) => setSelectedDate(date || undefined)}
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        {/* Time picker */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Heure</label>
+          <TimePicker24 value={selectedTime} onChange={setSelectedTime} />
+        </div>
+
+        {/* Participants input */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Nombre de participants</label>
+          <Input
+            type="number"
+            min={1}
+            max={activity?.participants || 20}
+            value={participants}
+            onChange={(e) => setParticipants(Number(e.target.value))}
+            className="w-full"
+          />
+        </div>
+
+        <Button
+          onClick={handleSchedule}
+          disabled={isLoading}
+          className="w-full mt-4 text-white"
+        >
+          {isLoading ? (
+            <>
+              <Loader className="mr-2 h-4 w-4 animate-spin" />
+              Réservation en cours...
+            </>
+          ) : (
+            "Réserver maintenant"
+          )}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+
+  const renderSuccessMessage = () => (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
+      <Card className="shadow-lg border-t-4 border-t-green-500">
+        <CardHeader className="pb-2 text-center">
+          <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
+            <CheckCircle className="h-8 w-8 text-green-600" />
+          </div>
+          <CardTitle className="text-xl text-green-700">
+            Félicitations !
+          </CardTitle>
+          <CardDescription className="text-base">
+            Votre activité a été réservée avec succès
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4 text-center">
+          <div className="bg-slate-50 p-4 rounded-lg">
+            <p className="font-medium text-gray-700">
+              Vous avez réservé{" "}
+              <span className="text-primary font-bold">{activity?.name}</span>{" "}
+              pour le{" "}
+              <span className="font-bold">
+                {scheduledDate
+                  ? format(scheduledDate, "dd MMMM yyyy 'à' HH'h'mm", {
+                      locale: fr,
+                    })
+                  : ""}
+              </span>
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 mt-4">
+            <div className="bg-slate-50 p-3 rounded-lg">
+              <p className="text-sm text-gray-500">Type d'activité</p>
+              <p className="font-medium">{categories(activity?.type)}</p>
+            </div>
+            <div className="bg-slate-50 p-3 rounded-lg">
+              <p className="text-sm text-gray-500">Participants</p>
+              <p className="font-medium">
+                {participants} personne{participants > 1 ? "s" : ""}
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <p className="text-sm text-gray-600">
+              Un récapitulatif de votre réservation a été envoyé à votre adresse
+              email.
+            </p>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-center gap-4 pt-2 pb-6">
+          <Button
+            variant="outline"
+            onClick={() => (window.location.href = "/activities")}
+            className="border-primary text-primary"
+          >
+            Voir toutes les activités
+          </Button>
+          <Button
+            onClick={() => (window.location.href = "/dashboard")}
+            className="bg-primary text-white"
+          >
+            Voir mes réservations
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
+  );
+
+  const renderAvailableCredits = () => {
+    if (!currentCompany) return null;
+
+    const currentPlan = currentCompany?.serviceOrders?.find(
+      (order: any) => order.status === "ACTIVE"
+    );
+    if (!currentPlan) return null;
+
+    const availableServices: Record<string, number> = {};
+    currentPlan?.details.forEach(
+      (detail: any) =>
+        (availableServices[detail.serviceType] =
+          detail.allowedBookings - detail.bookingsUsed)
+    );
+
+    return (
+      <div className="bg-slate-50 p-4 rounded-lg mb-6">
+        <h3 className="font-medium text-gray-900 mb-2">Crédits disponibles</h3>
+        <div className="flex gap-4">
+          {Object.entries(availableServices).map(([type, count]) => (
+            <div key={type} className="flex items-center gap-2">
+              <span className="text-sm text-gray-700">{type}:</span>
+              <Badge
+                variant="outline"
+                className="bg-purple-100 text-purple-800 font-semibold"
+              >
+                {count}
+              </Badge>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
-      <div className="container mx-auto flex flex-col py-20">
+      <div className="container mx-auto py-16 px-4 sm:px-6 lg:px-8">
         {isFetching ? (
-          <div className="flex w-full justify-center">
-            <Loader className="animate-spin" />
+          <div className="flex w-full justify-center py-20">
+            <Loader className="h-12 w-12 text-primary animate-spin" />
           </div>
         ) : (
-          <div className="flex flex-col gap-10">
-            <ul className="flex flex-row items-center gap-2">
-              <li className=" text-primary font-bold py-0">Accueil</li>
-              <li className=" px-2 border-l-2 border-primary text-primary font-bold py-0">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="flex flex-col gap-10"
+          >
+            <nav className="flex items-center gap-2 text-sm text-gray-500">
+              <a href="/" className="text-primary font-medium hover:underline">
+                Accueil
+              </a>
+              <span>/</span>
+              <a
+                href="/activities"
+                className="text-primary font-medium hover:underline"
+              >
                 {categories(activity?.type)}
-              </li>
-              <li className=" px-2 border-l-2 border-primary  font-bold py-0">
-                {activity?.name}
-              </li>
-            </ul>
+              </a>
+              <span>/</span>
+              <span className="font-medium">{activity?.name}</span>
+            </nav>
 
-            <div className="flex flex-row gap-20">
-              <div className="flex-1 flex flex-col gap-5">
-                {/* main image */}
-                <img
-                  className="w-full aspect-square object-cover rounded drop-shadow-xl shadow-black"
-                  src={mainImage?.fullUrl}
-                  alt=""
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+              {/* Left column - Images */}
+              <div className="space-y-6">
+                {/* Main image */}
+                <div className="rounded-xl overflow-hidden shadow-lg h-[400px] lg:h-[500px]">
+                  <img
+                    className="w-full h-full object-cover"
+                    src={mainImage?.fullUrl || "/placeholder.svg"}
+                    alt={activity?.name}
+                  />
+                </div>
 
-                {/* thumbnails: always 4 equal columns */}
-                <div className="grid grid-cols-4 gap-5">
+                {/* Thumbnails */}
+                <div className="grid grid-cols-4 gap-4">
                   {activity?.images.map((image: any) => (
-                    <img
+                    <div
                       key={image.id}
                       onClick={() => setMainImage(image)}
-                      className="w-full aspect-square object-cover hover:scale-[102%] duration-150 cursor-pointer rounded drop-shadow"
-                      src={image.fullUrl}
-                      alt="thumbnail"
-                    />
+                      className={`
+                        cursor-pointer rounded-lg overflow-hidden h-24 
+                        ${
+                          mainImage?.id === image.id
+                            ? "ring-4 ring-primary ring-offset-2"
+                            : "hover:opacity-80"
+                        }
+                        transition-all duration-200
+                      `}
+                    >
+                      <img
+                        className="w-full h-full object-cover"
+                        src={image.fullUrl || "/placeholder.svg"}
+                        alt="thumbnail"
+                      />
+                    </div>
                   ))}
                 </div>
               </div>
-              <div className="flex-1 flex flex-col gap-10 items-start">
-                <div className="flex flex-col gap-2">
-                  <h1 className="font-bold text-4xl px-2 border-l-4 border-primary text-primary">
+
+              {/* Right column - Details */}
+              <div className="space-y-8">
+                <div>
+                  <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 border-l-4 border-primary pl-4">
                     {activity?.name}
                   </h1>
-                  <p className="flex flex-row gap-2 font-bold">
-                    <span>(4.5/5)</span>
-                    <div className="flex flex-row items-center gap-1">
-                      <img className="h-4 w-auto" src={StarIcon} alt="" />
-                      <img className="h-4 w-auto" src={StarIcon} alt="" />
-                      <img className="h-4 w-auto" src={StarIcon} alt="" />
-                      <img className="h-4 w-auto" src={StarIcon} alt="" />
-                      <img className="h-4 w-auto" src={HalfStarIcon} alt="" />
-                    </div>
-                  </p>
-                </div>
 
-                <section>
-                  <h2>Descriptif :</h2>
-                  <p>{activity?.description}</p>
-                </section>
-
-                <section>
-                  <h2>Durée :</h2>
-                  <p>{activity?.duration}</p>
-                </section>
-
-                <section>
-                  <h2>Categorie :</h2>
-                  <p>{categories(activity?.type)}</p>
-                </section>
-
-                <section>
-                  <h2>Lieu :</h2>
-                  <p>
-                    {activity?.isInsideCompany
-                      ? "Sur site (en présentiel)"
-                      : activity?.address}
-                  </p>
-                </section>
-
-                <section>
-                  <h2>Nombre de participants :</h2>
-                  <p>{activity?.participants} Personnes</p>
-                </section>
-
-                <section>
-                  <h2>Mots clés</h2>
-                  <p>{activity?.keyWords?.join(",")}</p>
-                </section>
-
-                <div className="w-full p-6 bg-white rounded-lg shadow">
-                  <h2 className="text-lg font-bold mb-4">
-                    Réserver cette activité
-                  </h2>
-
-                  {/* Date picker */}
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full text-start flex flex-row items-center justify-start mb-4 relative"
-                      >
-                        <CalendarIcon className="cursor-pointer -translate-x-1 h-10 w-10 top-1/2 text-muted-foreground" />
-                        {selectedDate
-                          ? format(selectedDate, "dd/MM/yyyy")
-                          : "Choisir une date"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        initialFocus
-                        mode="single"
-                        disabled={(date) => {
-                          const day = date.getDay();
-                          return (
-                            date < maxSelectable ||
-                            date > new Date("2100-1-1") ||
-                            day === 0 ||
-                            day === 6
-                          );
-                        }}
-                        selected={selectedDate}
-                        onSelect={(date) => setSelectedDate(date || undefined)}
+                  <div className="flex items-center mt-3">
+                    <div className="flex items-center">
+                      <img
+                        src={StarIcon || "/placeholder.svg"}
+                        alt="star"
+                        className="h-5 w-5"
                       />
-                    </PopoverContent>
-                  </Popover>
-
-                  {/* Time input */}
-                  <TimePicker24
-                    value={selectedTime}
-                    onChange={setSelectedTime}
-                  />
-
-                  {/* Participants input */}
-                  <Input
-                    type="number"
-                    defaultValue={currentCompany?.employeesNumber || 0}
-                    value={participants}
-                    onChange={(e) => setParticipants(Number(e.target.value))}
-                    placeholder="Nombre de participants"
-                    className="w-full mb-6"
-                  />
-
-                  <Button
-                    onClick={handleSchedule}
-                    disabled={createSchedule.isLoading}
-                    className="w-full text-white"
-                  >
-                    {createSchedule.isLoading ? "En cours..." : "Réserver"}
-                  </Button>
+                      <img
+                        src={StarIcon || "/placeholder.svg"}
+                        alt="star"
+                        className="h-5 w-5"
+                      />
+                      <img
+                        src={StarIcon || "/placeholder.svg"}
+                        alt="star"
+                        className="h-5 w-5"
+                      />
+                      <img
+                        src={StarIcon || "/placeholder.svg"}
+                        alt="star"
+                        className="h-5 w-5"
+                      />
+                      <img
+                        src={HalfStarIcon || "/placeholder.svg"}
+                        alt="half star"
+                        className="h-5 w-5"
+                      />
+                    </div>
+                    <span className="ml-2 text-gray-600 font-medium">
+                      (4.5/5)
+                    </span>
+                  </div>
                 </div>
+
+                {!bookingSuccess && renderAvailableCredits()}
+
+                <div className="prose max-w-none">
+                  <h2 className="text-xl font-semibold flex items-center gap-2 text-gray-800">
+                    <Info className="h-5 w-5 text-primary" />
+                    Description
+                  </h2>
+                  <p className="text-gray-700 mt-2">{activity?.description}</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex items-start gap-3">
+                    <Clock className="h-5 w-5 text-primary mt-1" />
+                    <div>
+                      <h3 className="font-medium text-gray-900">Durée</h3>
+                      <p className="text-gray-700">
+                        {activity?.duration} heures
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <Badge className="h-5 text-primary bg-primary/10 mt-1">
+                      {categories(activity?.type)}
+                    </Badge>
+                    <div>
+                      <h3 className="font-medium text-gray-900">Catégorie</h3>
+                      <p className="text-gray-700">
+                        {categories(activity?.type)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-primary mt-1" />
+                    <div>
+                      <h3 className="font-medium text-gray-900">Lieu</h3>
+                      <p className="text-gray-700">
+                        {activity?.isInsideCompany
+                          ? "Sur site (en présentiel)"
+                          : activity?.address}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <Users className="h-5 w-5 text-primary mt-1" />
+                    <div>
+                      <h3 className="font-medium text-gray-900">
+                        Participants
+                      </h3>
+                      <p className="text-gray-700">
+                        Jusqu'à {activity?.participants} personnes
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {activity?.keyWords?.length > 0 && (
+                  <div className="flex items-start gap-3">
+                    <Tag className="h-5 w-5 text-primary mt-1" />
+                    <div>
+                      <h3 className="font-medium text-gray-900">Mots clés</h3>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {activity?.keyWords?.map((keyword: string) => (
+                          <Badge
+                            key={keyword}
+                            variant="outline"
+                            className="bg-gray-100"
+                          >
+                            {keyword}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Booking Form or Success Message */}
+                {bookingSuccess ? renderSuccessMessage() : renderBookingForm()}
               </div>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
       <Footer />

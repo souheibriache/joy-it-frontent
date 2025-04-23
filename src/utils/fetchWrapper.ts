@@ -3,7 +3,6 @@ import { store } from "../redux/store";
 import { resetUser } from "../redux/auth/user-slice";
 import { API_BASE_URL } from "./constants";
 import { resetCompany } from "@/redux/auth/company-slice";
-import { toast } from "sonner";
 
 export const fetchWithAuth = async (
   url: string,
@@ -47,7 +46,6 @@ export const fetchWithAuth = async (
       dispatch(resetAuth());
       dispatch(resetUser());
       dispatch(resetCompany());
-      toast.error(error?.message);
       //window.location.href = "/sign-in";
     }
   }

@@ -16,6 +16,14 @@ declare type Props = {
   reservations?: Schedule[];
 };
 
+const COLORS = {
+  primary: "#13534B",
+  secondary: "#A4C84F",
+  beige: "#F6EADB",
+  orange: "#FFAA94",
+  red: "#EF4444", // you can tweak to match your red-500
+};
+
 const CalendarComponent = ({ reservations }: Props) => {
   const eventDays = React.useMemo(
     () => new Set(reservations?.map((r) => normalize(new Date(r.date)))),
@@ -34,18 +42,17 @@ const CalendarComponent = ({ reservations }: Props) => {
 
   // Get color for event card
   const getEventColor = (status: ScheduleStatusEnum): string => {
-    console.log({ status });
     switch (status) {
       case ScheduleStatusEnum.PENDING:
-        return "orange";
+        return COLORS.orange;
       case ScheduleStatusEnum.COMPLETED:
-        return "primary";
+        return COLORS.primary;
       case ScheduleStatusEnum.ONGOING:
-        return "secondary";
+        return COLORS.secondary;
       case ScheduleStatusEnum.CANCELED:
-        return "red-500";
+        return COLORS.red;
       default:
-        return "primary";
+        return COLORS.primary;
     }
   };
 
@@ -136,14 +143,14 @@ const CalendarComponent = ({ reservations }: Props) => {
           <ul className="space-y-3">
             {todaysEvents?.map((evt: Schedule) => {
               const isOpen = openId === evt.id;
+              const borderColor = isOpen
+                ? COLORS.secondary
+                : getEventColor(evt.status);
               return (
                 <li
                   key={evt.id}
-                  className={`bg-white rounded-lg border-l-8 ${
-                    isOpen
-                      ? "border-secondary"
-                      : `border-${getEventColor(evt.status)}`
-                  } shadow-lg overflow-hidden transition-all duration-200`}
+                  style={{ borderLeft: `8px solid ${borderColor}` }}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-200"
                 >
                   <button
                     onClick={() => setOpenId(isOpen ? null : evt.id)}
@@ -161,7 +168,13 @@ const CalendarComponent = ({ reservations }: Props) => {
                             year: "numeric",
                           })}
                           &nbsp;&nbsp;
-                          {evt.startTime} - {evt.endTime}
+                          {`${evt.startTime.slice(0, 4)} ${evt.startTime.slice(
+                            -2
+                          )}`}{" "}
+                          –{" "}
+                          {`${evt.endTime.slice(0, 4)} ${evt.endTime.slice(
+                            -2
+                          )}`}
                         </div>
                       </div>
                     </div>
@@ -200,23 +213,23 @@ const CalendarComponent = ({ reservations }: Props) => {
                           <div>
                             <p className="text-xs text-gray-500">Durée</p>
                             <p className="font-medium">
-                              {evt.activity.duration} min
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-gray-500">Coût</p>
-                            <p className="font-medium">
-                              {evt.activity.creditCost} crédits
+                              {evt.activity.duration} heurs
                             </p>
                           </div>
                         </div>
 
                         <div className="mt-2">
                           <p className="text-xs text-gray-500">Lieu</p>
-                          <p className="font-medium">
-                            {evt.activity.address}, {evt.activity.postalCode}{" "}
-                            {evt.activity.city}
-                          </p>
+                          {evt?.activity?.address ? (
+                            <>
+                              <p className="font-medium">
+                                {evt.activity.address},{" "}
+                                {evt.activity.postalCode} {evt.activity.city}
+                              </p>
+                            </>
+                          ) : (
+                            <p>Chez le client</p>
+                          )}
                           {evt.activity.locationUrl && (
                             <a
                               href={evt.activity.locationUrl}

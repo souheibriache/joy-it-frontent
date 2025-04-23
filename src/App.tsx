@@ -1,10 +1,12 @@
+"use client";
+
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import Header from "./components/Header";
 import Auth from "./pages/Auth";
-import { AppDispatch, RootState } from "./redux/store"; // Adjust the path to your store
+import type { AppDispatch, RootState } from "./redux/store"; // Adjust the path to your store
 import VerificationNotification from "./components/VerificationNotification";
 import { useFetchCompany } from "./utils/api/company-api";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -27,12 +29,13 @@ import ChatBotIcon from "./components/chatBot/ChatBotIcon";
 import { X } from "lucide-react";
 import Blog from "./pages/Blog";
 import ArticleDetails from "./pages/ArticleDetails";
-import Cookies from "js-cookie";
-import { signInSuccess } from "./redux/auth/auth-slice";
-import { fetchCurrentUser } from "./utils/api/user-api";
-import { Button } from "./components/ui/button";
 import AccountSettings from "./pages/AccountSettings";
 import Reservations from "./pages/Reservations";
+import Cookies from "js-cookie";
+import CookieConsent, { CookiePreferences } from "./components/CookiesConcent";
+
+const VITE_API_URL =
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDaDRbo8BT55cYXdfpN_oH4mVP0lCQgC_k";
 function App() {
   const { accessToken } = useSelector((state: RootState) => state.auth);
   const { currentCompany } = useSelector((state: RootState) => state.company);
@@ -40,40 +43,16 @@ function App() {
   const dispatch = useDispatch<AppDispatch>();
   const [cookiesVisible, setCookiesVisible] = useState(false);
 
-  const baseUrl = import.meta.env.VITE_API_URL;
-  console.log({ baseUrl });
-  useFetchCompany();
+  const { fetchCompany } = useFetchCompany();
+  useEffect(() => {
+    fetchCompany();
+  }, []);
 
   useEffect(() => {
-    // Read the tokens from the shared cookies
-    const accessToken = Cookies.get("accessToken");
-    const refreshToken = Cookies.get("refreshToken");
-
     if (accessToken) {
-      dispatch(
-        signInSuccess({ accessToken, refreshToken: refreshToken || null })
-      );
-    }
-  }, [dispatch]);
-
-  useEffect(() => {
-    const cookieAccessToken = Cookies.get("accessToken");
-    const cookieRrefreshToken = Cookies.get("refreshToken");
-
-    if (accessToken) {
-      if (cookieAccessToken && cookieAccessToken) {
-        dispatch(
-          signInSuccess({
-            accessToken: cookieAccessToken,
-            refreshToken: cookieRrefreshToken || null,
-          })
-        );
-        dispatch(fetchCurrentUser());
-      }
-
       const decoded: any = accessToken
         ? jwtDecode(accessToken)
-        : jwtDecode(cookieAccessToken!);
+        : jwtDecode(accessToken!);
 
       const expired = decoded.iat * 1000 < Date.now();
       if (expired) {
@@ -105,7 +84,7 @@ function App() {
     // Helper function to update chat history
     const updateHistory = (text: any, isError = false) => {
       setChatHistory((prev: any) => [
-        ...prev.filter((msg: any) => msg.text != "Thinking..."),
+        ...prev.filter((msg: any) => msg.text != "Chargement..."),
         { role: "model", text, isError },
       ]);
     };
@@ -121,10 +100,7 @@ function App() {
     };
     try {
       // Make the API call to get the bot's response
-      const response = await fetch(
-        import.meta.env.VITE_API_URL,
-        requestOptions
-      );
+      const response = await fetch(VITE_API_URL, requestOptions);
       const data = await response.json();
       if (!response.ok)
         throw new Error(data?.error.message || "Something went wrong!");
@@ -146,14 +122,32 @@ function App() {
     });
   }, [chatHistory]);
 
-  setTimeout(() => {
-    const cookies = Cookies.get("cookies-usage");
-    if (!cookies) setCookiesVisible(true);
-  }, 3000);
+  // Check for cookie consent on component mount
+  useEffect(() => {
+    const cookiePreferences = Cookies.get("cookie-preferences");
+    if (!cookiePreferences) {
+      // Show cookie banner after a short delay if no preferences are saved
+      const timer = setTimeout(() => {
+        setCookiesVisible(true);
+      }, 3000);
 
-  const handleCookies = () => {
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleCookieAccept = (preferences: CookiePreferences) => {
     setCookiesVisible(false);
-    Cookies.set("cookies-usage", "true");
+
+    // Apply cookie preferences (e.g., initialize analytics if consented)
+    if (preferences.analytics) {
+      // Initialize analytics here
+      console.log("Analytics initialized");
+    }
+
+    if (preferences.marketing) {
+      // Initialize marketing pixels here
+      console.log("Marketing pixels initialized");
+    }
   };
 
   return (
@@ -320,36 +314,9 @@ function App() {
           </div>
         </div>
       </div>
-      <div
-        className={`fixed w-full bg-primary bottom-0 py-10 duration-500 translate-y-[30vh] ${
-          cookiesVisible ? "translate-y-0" : ""
-        }`}
-      >
-        <div className="container mx-auto flex flex-row justify-between items-center gap-20">
-          <div className="flex flex-col text-white gap-4 text-xl">
-            <p>
-              <strong>Nous utilisons des cookies.</strong> Chez Joy‑It, nous
-              utilisons des cookies (et technologies similaires) pour améliorer
-              votre expérience de navigation, mémoriser vos préférences et
-              analyser le trafic de notre site.
-            </p>
-            <p>
-              En cliquant sur <em>« Tout accepter »</em>, vous consentez à notre
-              utilisation des cookies. Consultez notre{" "}
-              <a href="/politique-de-cookies">Politique de cookies</a> ou gérez
-              vos paramètres à tout moment via le lien{" "}
-              <strong>Paramètres des cookies</strong> en pied de page.
-            </p>
-          </div>
 
-          <Button
-            onClick={handleCookies}
-            className="text-nowrap bg-secondary hover:bg-opacity-100 bg-opacity-80 hover:bg-secondary text-white text-lg"
-          >
-            Tout accepter{" "}
-          </Button>
-        </div>
-      </div>
+      {/* Cookie Consent Banner */}
+      {cookiesVisible && <CookieConsent onAccept={handleCookieAccept} />}
     </div>
   );
 }

@@ -1,10 +1,8 @@
 import { useMutation, useQueryClient } from "react-query";
 import { toast } from "sonner";
 
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { RootState } from "@/redux/store"; // Adjust the path to your store
+import { useDispatch } from "react-redux";
+import { useState } from "react";
 import {
   fetchCompanyFailure,
   fetchCompanyStart,
@@ -15,40 +13,25 @@ import { UpdateCompanyDto } from "@/types/company";
 
 export const useFetchCompany = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { currentCompany, loading } = useSelector(
-    (state: RootState) => state.company
-  );
-  const accessToken = useSelector((state: RootState) => state.auth.accessToken);
 
-  useEffect(() => {
-    const fetchCompany = async () => {
-      if (!accessToken) {
-        return;
-      }
-      if (!currentCompany) {
-        dispatch(fetchCompanyStart());
-        try {
-          const data = await fetchWithAuth("/companies/my-company", {
-            method: "GET",
-          });
+  const fetchCompany = async () => {
+    dispatch(fetchCompanyStart());
+    try {
+      const data = await fetchWithAuth("/companies/my-company", {
+        method: "GET",
+      });
+      console.log({ data });
+      dispatch(fetchCompanySuccess(data));
+      return data;
+    } catch (error: any) {
+      dispatch(
+        fetchCompanyFailure(error.message || "Failed to fetch company data")
+      );
+      return null;
+    }
+  };
 
-          if (data) {
-            dispatch(fetchCompanySuccess(data));
-            navigate("/");
-          }
-        } catch (error) {
-          dispatch(fetchCompanyFailure(error));
-        }
-      } else if (currentCompany && !currentCompany.subscription) {
-        //navigate("/plans");
-      }
-    };
-
-    fetchCompany();
-  }, [accessToken, currentCompany, dispatch, navigate]);
-
-  return { currentCompany, loading };
+  return { fetchCompany };
 };
 
 export type CreateCompanyData = {

@@ -1,16 +1,43 @@
 import CallendarComponent from "@/components/CallendarComponent";
-import { RootState } from "@/redux/store";
 import { Heart } from "lucide-react";
 import ClientSpaceSvg from "../assets/client-space.svg";
 import { useSelector } from "react-redux";
-import { useGetAllSchedules } from "@/utils/api/schedule-api";
+import { Schedule, useGetAllSchedules } from "@/utils/api/schedule-api";
+import { ScheduleStatusEnum } from "@/types/schedule";
 
 type Props = {};
 
 const Reservations = ({}: Props) => {
   const { data: schedules } = useGetAllSchedules();
+  const { currentCompany } = useSelector((state: any) => state.company);
 
-  const { currentCompany } = useSelector((state: RootState) => state.company);
+  const currentPlan = currentCompany?.serviceOrders?.find(
+    (order: any) => order.status === "ACTIVE"
+  );
+
+  const availableServices: Record<string, number> = {};
+  currentPlan?.details.forEach(
+    (detail: any) =>
+      (availableServices[detail.serviceType] =
+        detail.allowedBookings - detail.bookingsUsed)
+  );
+
+  const completedCount = schedules?.filter(
+    (s: Schedule) => s.status === ScheduleStatusEnum.COMPLETED
+  ).length;
+
+  // 2️⃣ Activité programmée = PENDING || ONGOING
+  const plannedCount = schedules?.filter(
+    (s: Schedule) =>
+      s.status === ScheduleStatusEnum.PENDING ||
+      s.status === ScheduleStatusEnum.ONGOING
+  ).length;
+
+  const remainingCount = Object.values(availableServices).reduce(
+    (sum, v) => sum + v,
+    0
+  );
+
   return (
     <div className="container mx-auto flex flex-row h-full gap-10">
       <div className="flex-[3] bg-gray-100 h-full p-4 pt-10">
@@ -37,9 +64,9 @@ const Reservations = ({}: Props) => {
 
         {/* Activity Section */}
         <div className="grid grid-cols-3 gap-2 mb-6">
-          <ActivityCard title="Activité restante" count={0} />
-          <ActivityCard title="Activité programmée" count={0} />
-          <ActivityCard title="Activité réalisée" count={0} />
+          <ActivityCard title="Activité restante" count={remainingCount || 0} />
+          <ActivityCard title="Activité programmée" count={plannedCount || 0} />
+          <ActivityCard title="Activité réalisée" count={completedCount || 0} />
         </div>
 
         {/* Statistics Section */}
@@ -48,6 +75,22 @@ const Reservations = ({}: Props) => {
           <StatCard percentage={0} label="Gain de productivité" />
           <StatCard percentage={0} label="Cohésion après l'activité" />
           <StatCard percentage={0} label="Amélioration ambiance de travail" />
+        </div>
+
+        <h2 className="font-bold mb-2">Credit actuelles</h2>
+        <div className="grid grid-cols-3 gap-2 mb-6">
+          <SoldCard
+            service="Snacking"
+            count={availableServices["NOURRITURE"] || 0}
+          />
+          <SoldCard
+            service="Bien‑être"
+            count={availableServices["BIEN_ETRE"] || 0}
+          />
+          <SoldCard
+            service="Team building"
+            count={availableServices["TEAM_BUILDING"] || 0}
+          />
         </div>
 
         {/* Wishlist Section */}
@@ -147,6 +190,15 @@ function WishlistItem({ title }: { title: string }) {
     <div className="bg-white p-4 rounded-lg shadow-sm flex justify-between items-center">
       <span className="font-bold">{title}</span>
       <Heart className="text-red-500 fill-red-500" size={20} />
+    </div>
+  );
+}
+
+function SoldCard({ service, count }: { service: string; count: number }) {
+  return (
+    <div className="bg-white p-4 rounded-lg shadow-sm text-center">
+      <h3 className="text-sm font-medium mb-2">{service}</h3>
+      <div className="text-2xl font-bold">{count}</div>
     </div>
   );
 }

@@ -1,73 +1,148 @@
-import React from "react";
-import { useSearchParams } from "react-router-dom";
+"use client";
+
+import type React from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useGetCheckoutSession } from "@/utils/api/plan-api";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { AlertCircle, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { motion } from "framer-motion";
 
 const PaymentDetails: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const sessionId = searchParams.get("session_id");
   const { session, isLoading, error } = useGetCheckoutSession(sessionId || "");
 
   if (isLoading) {
-    return <div>Loading payment details...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-100px)]">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-lg font-medium">
+            Chargement des détails du paiement...
+          </p>
+        </div>
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto py-10 text-center">
-        <h1 className="text-3xl font-bold text-red-500 mb-4">Payment Failed</h1>
-        <p className="text-lg">{error}</p>
-        <Button
-          className="mt-6 bg-primary text-white px-6 py-2 rounded-md"
-          onClick={() => (window.location.href = "/plans")}
-        >
-          Go Back to Plans
-        </Button>
+      <div className="container mx-auto py-10 px-4 max-w-2xl">
+        <Card className="border-none shadow-lg">
+          <CardHeader className="bg-red-50 text-center">
+            <div className="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-2">
+              <AlertCircle className="h-6 w-6 text-red-600" />
+            </div>
+            <CardTitle className="text-2xl font-bold text-red-600">
+              Échec du paiement
+            </CardTitle>
+            <CardDescription className="text-red-700">{error}</CardDescription>
+          </CardHeader>
+          <CardFooter className="flex justify-center pt-6 pb-8">
+            <Button
+              className="bg-primary hover:bg-primary/90 text-white px-6"
+              onClick={() => navigate("/plans")}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Retour aux plans
+            </Button>
+          </CardFooter>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto py-10 text-center">
-      <h1 className="text-3xl font-bold text-green-500 mb-6">
-        Payment Successful!
-      </h1>
-      <p className="text-lg mb-4">Thank you for your payment.</p>
-
-      <div className="border p-6 rounded shadow-md inline-block text-left">
-        <h2 className="text-2xl font-bold mb-4">Payment Details</h2>
-        <p>
-          <strong>Plan:</strong> {session?.plan || "N/A"}
-        </p>
-        <p>
-          <strong>Amount Paid:</strong> €
-          {(session?.amount_total / 100).toFixed(2)}
-        </p>
-
-        <p>
-          <strong>Customer:</strong> {session?.customer_email || "N/A"}
-        </p>
-        <p>
-          <strong>Subscription Start:</strong>{" "}
-          {session?.start_date
-            ? new Date(session.start_date * 1000).toLocaleDateString()
-            : "N/A"}
-        </p>
-        <p>
-          <strong>Subscription End:</strong>{" "}
-          {session?.end_date
-            ? new Date(session.end_date * 1000).toLocaleDateString()
-            : "N/A"}
-        </p>
-      </div>
-
-      <Button
-        className="mt-6 bg-primary text-white px-6 py-2 rounded-md"
-        onClick={() => (window.location.href = "/plans")}
-      >
-        Back to Plans
-      </Button>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="container mx-auto py-10 px-4 max-w-2xl"
+    >
+      <Card className="border-none shadow-lg overflow-hidden">
+        <CardHeader className="bg-green-50 text-center">
+          <div className="mx-auto w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-2">
+            <CheckCircle2 className="h-6 w-6 text-green-600" />
+          </div>
+          <CardTitle className="text-2xl font-bold text-green-600">
+            Paiement réussi !
+          </CardTitle>
+          <CardDescription className="text-green-700">
+            Merci pour votre paiement.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="bg-slate-50 p-6 rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-slate-800">
+              Détails du paiement
+            </h2>
+            <div className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-slate-600">Plan :</span>
+                <span className="font-medium">
+                  {session?.metadata?.orderId || "N/A"}
+                </span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-slate-600">Montant payé :</span>
+                <span className="font-medium">
+                  {session ? (session.amount_total / 100).toFixed(2) : "0.00"} €
+                </span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-slate-600">Client :</span>
+                <span className="font-medium">
+                  {session?.customer_details?.email || "N/A"}
+                </span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-slate-600">Début d'abonnement :</span>
+                <span className="font-medium">
+                  {session?.expires_at
+                    ? new Date(session.expires_at * 1000).toLocaleDateString(
+                        "fr-FR"
+                      )
+                    : new Date().toLocaleDateString("fr-FR")}
+                </span>
+              </div>
+              <Separator />
+              <div className="flex justify-between">
+                <span className="text-slate-600">Fin d'abonnement :</span>
+                <span className="font-medium">
+                  {session?.expires_at
+                    ? new Date(
+                        (session?.expires_at + 60 * 60 * 24 * 30 * 3) * 1000
+                      ).toLocaleDateString("fr-FR")
+                    : "N/A"}
+                </span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex justify-center pt-2 pb-8">
+          <Button
+            className="bg-primary hover:bg-primary/90 text-white px-6"
+            onClick={() => navigate("/activities")}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Retour aux activités
+          </Button>
+        </CardFooter>
+      </Card>
+    </motion.div>
   );
 };
 
