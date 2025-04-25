@@ -24,6 +24,22 @@ const COLORS = {
   red: "#EF4444", // you can tweak to match your red-500
 };
 
+// Translate status to French
+const getStatusInFrench = (status: ScheduleStatusEnum): string => {
+  switch (status) {
+    case ScheduleStatusEnum.PENDING:
+      return "En attente";
+    case ScheduleStatusEnum.COMPLETED:
+      return "Terminé";
+    case ScheduleStatusEnum.ONGOING:
+      return "En cours";
+    case ScheduleStatusEnum.CANCELED:
+      return "Annulé";
+    default:
+      return "Inconnu";
+  }
+};
+
 const CalendarComponent = ({ reservations }: Props) => {
   const eventDays = React.useMemo(
     () => new Set(reservations?.map((r) => normalize(new Date(r.date)))),
@@ -175,6 +191,17 @@ const CalendarComponent = ({ reservations }: Props) => {
                           {`${evt.endTime.slice(0, 4)} ${evt.endTime.slice(
                             -2
                           )}`}
+                        </div>
+                        {/* Display status in French */}
+                        <div className="text-xs mt-1">
+                          <span
+                            className="px-2 py-0.5 rounded-full text-white"
+                            style={{
+                              backgroundColor: getEventColor(evt.status),
+                            }}
+                          >
+                            {getStatusInFrench(evt.status)}
+                          </span>
                         </div>
                       </div>
                     </div>

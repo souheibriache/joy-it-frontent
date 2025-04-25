@@ -1,4 +1,4 @@
-import { OrderOptionsDto, PageDto } from "./order";
+import type { OrderOptionsDto, PageDto } from "./order";
 
 export enum ActivityType {
   BIEN_ETRE = "BIEN_ETRE",
@@ -27,19 +27,25 @@ export type UpdateActivityMainImageDto = {
   imageId: string;
 };
 
+// Updated to match backend expectations
 export type ActivityFilterDto = {
-  search?: string;
-  types?: ActivityType[];
-  durationMin?: number;
-  durationMax?: number;
-  isAvailable?: boolean;
+  search?: string | null;
+  type?: ActivityType | null; // Changed from types to type
+  durationMin?: number | null;
+  durationMax?: number | null;
+  isAvailable?: boolean | null;
 };
 
-export type TemplateOptionsDto = {
-  page: number;
-  take: number;
-  query?: any; // Filtering options
-  sort?: OrderOptionsDto; // Sorting options
+// Updated to match backend expectations
+export type ActivityOptionsDto = {
+  page: number | null;
+  take: number | null;
+  search?: string | null;
+  type?: ActivityType | null; // Changed from types to type
+  durationMin?: number | null;
+  durationMax?: number | null;
+  isAvailable?: boolean | null;
+  sort?: OrderOptionsDto | null; // Sorting options
 };
 
 export type Activity = {

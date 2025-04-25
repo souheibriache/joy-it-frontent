@@ -2,11 +2,26 @@ import { useQuery } from "react-query";
 import fetchWithAuth from "../fetchWrapper";
 import { toast } from "sonner";
 import { serializeQuery } from "../mathods";
-import { TemplateOptionsDto } from "@/types/activity";
+import type { ActivityOptionsDto } from "@/types/activity";
 
-export const useGetPaginatedActivities = (options: TemplateOptionsDto) => {
+export const useGetPaginatedActivities = (options: ActivityOptionsDto) => {
+  // Create a sanitized copy of options with proper number types
+  const sanitizedOptions = {
+    ...options,
+    page: Number(options.page),
+    take: Number(options.take),
+    durationMin:
+      options.durationMin !== undefined
+        ? Number(options.durationMin)
+        : undefined,
+    durationMax:
+      options.durationMax !== undefined
+        ? Number(options.durationMax)
+        : undefined,
+  };
+
   const getPaginatedActivitiesRequest = async () => {
-    const params = serializeQuery(options);
+    const params = serializeQuery(sanitizedOptions);
     return await fetchWithAuth(`/activities?${params}`, { method: "GET" });
   };
 
@@ -14,7 +29,7 @@ export const useGetPaginatedActivities = (options: TemplateOptionsDto) => {
     data: activities,
     isLoading,
     error,
-  } = useQuery(["activities", options], getPaginatedActivitiesRequest);
+  } = useQuery(["activities", sanitizedOptions], getPaginatedActivitiesRequest);
 
   if (error) {
     toast.error("Echéc de recuperation des activités");

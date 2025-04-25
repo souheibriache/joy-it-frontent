@@ -1,4 +1,6 @@
-import { useMutation, useQueryClient } from "react-query";
+"use client";
+
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { toast } from "sonner";
 
 import { useDispatch } from "react-redux";
@@ -9,7 +11,7 @@ import {
   fetchCompanySuccess,
 } from "@/redux/auth/company-slice";
 import fetchWithAuth from "../fetchWrapper";
-import { UpdateCompanyDto } from "@/types/company";
+import type { UpdateCompanyDto } from "@/types/company";
 
 export const useFetchCompany = () => {
   const dispatch = useDispatch();
@@ -31,7 +33,15 @@ export const useFetchCompany = () => {
     }
   };
 
-  return { fetchCompany };
+  // Use enabled: false to prevent automatic query execution
+  const { data: company, refetch } = useQuery("myCompany", fetchCompany, {
+    retry: false,
+    onError: () => {
+      // Handle error silently - we're already dispatching the error in fetchCompany
+    },
+  });
+
+  return { company, refetch, fetchCompany };
 };
 
 export type CreateCompanyData = {
@@ -74,7 +84,7 @@ export const useCreateCompany = () => {
         );
       }
 
-      queryClient.invalidateQueries("currentCompany");
+      queryClient.invalidateQueries("myCompany");
     },
     onError: (error: any) => {
       toast.error(error.message || "Échec de la création de l'entreprise.");
@@ -98,11 +108,11 @@ export const useUpdateCompany = () => {
         },
         body: JSON.stringify(data),
       });
-      toast.success("Informations de l’entreprise mises à jour avec succès.");
+      toast.success("Informations de l'entreprise mises à jour avec succès.");
       return res;
     } catch (err) {
       setError(err);
-      toast.error("Échec de la mise à jour des informations de l’entreprise.");
+      toast.error("Échec de la mise à jour des informations de l'entreprise.");
       throw err;
     } finally {
       setLoading(false);
@@ -114,7 +124,6 @@ export const useUpdateCompany = () => {
 
 export const useUpdateCompanyLogo = () => {
   const [uploading, setUploading] = useState(false);
-
   const [error, setError] = useState<any>(null);
 
   const updateLogo = async (file: File) => {

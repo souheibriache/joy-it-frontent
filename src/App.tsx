@@ -32,7 +32,10 @@ import ArticleDetails from "./pages/ArticleDetails";
 import AccountSettings from "./pages/AccountSettings";
 import Reservations from "./pages/Reservations";
 import Cookies from "js-cookie";
-import CookieConsent, { CookiePreferences } from "./components/CookiesConcent";
+import LoadingLogo from "./assets/loading-logo.svg";
+import CookieConsent, {
+  type CookiePreferences,
+} from "./components/CookiesConcent";
 
 const VITE_API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDaDRbo8BT55cYXdfpN_oH4mVP0lCQgC_k";
@@ -42,17 +45,35 @@ function App() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [cookiesVisible, setCookiesVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { fetchCompany } = useFetchCompany();
-  useEffect(() => {
-    fetchCompany();
-  }, []);
 
+  // First useEffect to fetch company data
   useEffect(() => {
     if (accessToken) {
-      const decoded: any = accessToken
-        ? jwtDecode(accessToken)
-        : jwtDecode(accessToken!);
+      const loadCompanyData = async () => {
+        try {
+          await fetchCompany();
+        } catch (error) {
+          console.error("Error fetching company:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      loadCompanyData();
+    } else {
+      setIsLoading(false);
+    }
+  }, [accessToken]);
+
+  // Second useEffect to handle redirections based on token and company
+  useEffect(() => {
+    if (!accessToken || isLoading) return;
+
+    try {
+      const decoded: any = jwtDecode(accessToken);
 
       const expired = decoded.iat * 1000 < Date.now();
       if (expired) {
@@ -68,10 +89,13 @@ function App() {
       if (!currentCompany) {
         navigate("/create-company");
       }
+    } catch (error) {
+      console.error("Error decoding token:", error);
     }
-  }, [accessToken, navigate, dispatch, currentCompany]);
+  }, [accessToken, navigate, dispatch, currentCompany, isLoading]);
 
-  const chatBodyRef: any = useRef();
+  // Show loading state while checking authentication and company
+
   const [showChatbot, setShowChatbot] = useState(false);
   const [chatHistory, setChatHistory] = useState([
     {
@@ -116,13 +140,15 @@ function App() {
   };
   useEffect(() => {
     // Auto-scroll whenever chat history updates
-    chatBodyRef.current.scrollTo({
-      top: chatBodyRef.current.scrollHeight,
-      behavior: "smooth",
-    });
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTo({
+        top: chatBodyRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [chatHistory]);
 
-  // Check for cookie consent on component mount
+  const chatBodyRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const cookiePreferences = Cookies.get("cookie-preferences");
     if (!cookiePreferences) {
@@ -149,6 +175,17 @@ function App() {
       console.log("Marketing pixels initialized");
     }
   };
+
+  // Show loading state while checking authentication and company
+  if (isLoading && accessToken) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center">
+        <div className="animate-bounce rounded-full h-32 w-32">
+          <img src={LoadingLogo} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="font-new-order relative h-[100vh] flex flex-col">

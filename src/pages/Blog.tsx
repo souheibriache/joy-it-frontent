@@ -5,13 +5,12 @@ import {
   ArticleFilterDto,
   useGetPaginatedArticles,
 } from "@/utils/api/blog-api";
-import { TemplateOptionsDto } from "@/types/activity";
 import { Link } from "react-router-dom";
 type Props = {};
 
 const Blog = ({}: Props) => {
   const [filters] = useState<ArticleFilterDto>({});
-  const [pagination] = useState<TemplateOptionsDto>({
+  const [pagination] = useState<any>({
     page: 1,
     take: 10,
     query: filters,

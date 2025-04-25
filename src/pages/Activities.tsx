@@ -1,8 +1,10 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ActivityFilterDto, TemplateOptionsDto } from "@/types/activity";
+import type { ActivityFilterDto, ActivityOptionsDto } from "@/types/activity";
 import { useGetPaginatedActivities } from "@/utils/api/activity-api";
 import { ArrowRight, Filter, Loader } from "lucide-react";
 
@@ -15,27 +17,26 @@ export const Activities = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Parse URL params into our filter shape
+  // Parse URL params into our filter shape - now flattened
   const initialFilters: ActivityFilterDto = {
-    search: searchParams.get("query[search]") || undefined,
-    types: (searchParams.getAll("query[types][]") as any) || undefined,
-    durationMin: searchParams.has("query[durationMin]")
-      ? Number(searchParams.get("query[durationMin]"))
-      : undefined,
-    durationMax: searchParams.has("query[durationMax]")
-      ? Number(searchParams.get("query[durationMax]"))
-      : undefined,
-    isAvailable: searchParams.has("query[isAvailable]")
-      ? searchParams.get("query[isAvailable]") === "true"
-      : undefined,
+    search: searchParams.get("search") || "",
+    type: (searchParams.get("type") as any) || null,
+    durationMin: searchParams.has("durationMin")
+      ? Number(searchParams.get("durationMin"))
+      : null,
+    durationMax: searchParams.has("durationMax")
+      ? Number(searchParams.get("durationMax"))
+      : null,
+    isAvailable: searchParams.get("isAvailable") === "true",
   };
 
-  const [filters, setFilters] = useState<ActivityFilterDto>({});
+  const [filters, setFilters] = useState<ActivityFilterDto>(initialFilters);
   const [showFilters, setShowFilters] = useState(false);
-  const [pagination, setPagination] = useState<TemplateOptionsDto>({
+  const [pagination, setPagination] = useState<ActivityOptionsDto>({
     page: Number(searchParams.get("page")) || 1,
     take: Number(searchParams.get("take")) || 12,
-    query: initialFilters,
+    // Filters are now directly in the options object
+    ...initialFilters,
   });
 
   const { activities, isLoading } = useGetPaginatedActivities(pagination);
@@ -43,12 +44,12 @@ export const Activities = () => {
   // Fix for initial load - ensure we have a valid pagination object
   useEffect(() => {
     // This ensures we always have a valid pagination object on first load
-    setPagination((prev) => ({ ...prev, query: filters }));
+    setPagination((prev) => ({ ...prev, ...filters }));
   }, []);
 
   // Whenever filters change, reset to page 1 and refetch
   useEffect(() => {
-    setPagination((prev) => ({ ...prev, query: filters, page: 1 }));
+    setPagination((prev) => ({ ...prev, ...filters, page: 1 }));
   }, [filters]);
 
   // Update URL when pagination changes
@@ -57,31 +58,34 @@ export const Activities = () => {
   }, [pagination]);
 
   const updateUrlParams = () => {
-    // Build bracket-notation params
+    // Build flattened params
     const params = new URLSearchParams();
 
     // Add pagination params
     params.set("page", String(pagination.page));
     params.set("take", String(pagination.take));
 
-    // Add filter params
-    const { query } = pagination;
-    if (query) {
-      if (query.search) {
-        params.set("query[search]", query.search);
-      }
-      if (query.types && query.types.length > 0) {
-        query.types.forEach((t: any) => params.append("query[types][]", t));
-      }
-      if (query.durationMin != null) {
-        params.set("query[durationMin]", String(query.durationMin));
-      }
-      if (query.durationMax != null) {
-        params.set("query[durationMax]", String(query.durationMax));
-      }
-      if (query.isAvailable != null) {
-        params.set("query[isAvailable]", String(query.isAvailable));
-      }
+    // Add filter params directly (no more query nesting)
+    if (pagination.search) {
+      params.set("search", pagination.search);
+    }
+    if (pagination.type) {
+      params.set("type", pagination.type);
+    }
+    if (
+      pagination.durationMin !== undefined &&
+      pagination.durationMin !== null
+    ) {
+      params.set("durationMin", String(Number(pagination.durationMin)));
+    }
+    if (
+      pagination.durationMax !== undefined &&
+      pagination.durationMax !== null
+    ) {
+      params.set("durationMax", String(Number(pagination.durationMax)));
+    }
+    if (pagination.isAvailable !== undefined) {
+      params.set("isAvailable", String(pagination.isAvailable));
     }
 
     setSearchParams(params);
@@ -101,7 +105,29 @@ export const Activities = () => {
   };
 
   const handleClearFilters = () => {
-    setFilters({});
+    // Clear all filters
+    const emptyFilters: ActivityFilterDto = {
+      search: "",
+      type: null,
+      durationMin: null,
+      durationMax: null,
+      isAvailable: undefined,
+    };
+
+    // Update both state variables
+    setFilters(emptyFilters);
+    setPagination((prev) => ({
+      page: 1,
+      take: prev.take,
+      ...emptyFilters,
+    }));
+
+    // Clear URL params except for page and take
+    const params = new URLSearchParams();
+    params.set("page", "1");
+    params.set("take", String(pagination.take));
+    setSearchParams(params);
+
     setShowFilters(false);
   };
 
@@ -112,8 +138,7 @@ export const Activities = () => {
   const getActiveFilterCount = () => {
     let count = 0;
     if (filters.search) count++;
-    if (filters.types && filters.types.length > 0)
-      count += filters.types.length;
+    if (filters.type) count++; // Changed from types to type
     if (filters.isAvailable !== undefined) count++;
     if (filters.durationMin !== undefined || filters.durationMax !== undefined)
       count++;
@@ -206,7 +231,9 @@ export const Activities = () => {
                   <img
                     src={
                       activity.images.find((i: any) => i.isMain)?.fullUrl ||
-                      activity.images[0]?.fullUrl
+                      activity.images[0]?.fullUrl ||
+                      "/placeholder.svg" ||
+                      "/placeholder.svg"
                     }
                     alt={activity.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -234,7 +261,7 @@ export const Activities = () => {
         {activities && activities.meta.pageCount > 1 && (
           <div className="mt-12 flex justify-center">
             <Pagination
-              currentPage={pagination.page}
+              currentPage={pagination.page || 1}
               totalPages={activities.meta.pageCount}
               onPageChange={handlePageChange}
             />

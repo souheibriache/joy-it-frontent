@@ -1,9 +1,18 @@
+"use client";
+
+import { useSelector } from "react-redux";
 import Landing from "../../assets/landing.svg";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "@/redux/store";
 
 type Props = {};
 
 const Hero = ({}: Props) => {
+  const navigate = useNavigate();
+
+  const { currentCompany } = useSelector((state: RootState) => state.company);
+
   return (
     <div
       className={`relative w-full h-full overflow-hidden bg-[url(/src/assets/landingpage_background.png)] bg-cover bg-center`}
@@ -20,7 +29,10 @@ const Hero = ({}: Props) => {
               Rejoignez-nous dès aujourd'hui !
             </p>
           </div>
-          <Button className="bg-white text-primary hover:bg-secondary mt-4 md:mt-0">
+          <Button
+            className="bg-white text-primary hover:bg-secondary mt-4 md:mt-0"
+            onClick={() => navigate(currentCompany ? "/order" : "/login")}
+          >
             Découvrir nos offres
           </Button>
         </div>

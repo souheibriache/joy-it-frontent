@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { ActivityFilterDto, ActivityType } from "@/types/activity";
+"use client";
+
+import type React from "react";
+import { useState, useEffect } from "react";
+import { type ActivityFilterDto, ActivityType } from "@/types/activity";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Filter, X } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface ActivityFilterProps {
   initialFilters: ActivityFilterDto;
@@ -42,14 +46,11 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({
     }));
   };
 
-  const handleCheckboxChange = (type: ActivityType) => {
-    setFilters((prev) => {
-      const types = prev.types || [];
-      const updated = types.includes(type)
-        ? types.filter((t) => t !== type)
-        : [...types, type];
-      return { ...prev, types: updated };
-    });
+  const handleTypeChange = (value: ActivityType) => {
+    setFilters((prev) => ({
+      ...prev,
+      type: value,
+    }));
   };
 
   const handleAvailabilityChange = (checked: boolean) => {
@@ -60,7 +61,8 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({
   };
 
   const handleDurationChange = (values: number[]) => {
-    const [min, max] = values;
+    // Ensure values are proper numbers
+    const [min, max] = values.map(Number);
     setDurationRange([min, max]);
     setFilters((prev) => ({
       ...prev,
@@ -72,8 +74,7 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({
   const getActiveFilterCount = () => {
     let count = 0;
     if (filters.search) count++;
-    if (filters.types && filters.types.length > 0)
-      count += filters.types.length;
+    if (filters.type) count++;
     if (filters.isAvailable !== undefined) count++;
     if (filters.durationMin !== undefined || filters.durationMax !== undefined)
       count++;
@@ -143,16 +144,16 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({
       {/* Types */}
       <div className="mt-6">
         <Label className="text-sm font-medium mb-3 block">
-          Types d'activités
+          Type d'activité
         </Label>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mt-2">
+        <RadioGroup
+          value={filters.type || ""}
+          onValueChange={handleTypeChange}
+          className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-2"
+        >
           {Object.values(ActivityType).map((type) => (
             <div key={type} className="flex items-center space-x-2">
-              <Checkbox
-                id={`type-${type}`}
-                checked={filters.types?.includes(type) || false}
-                onCheckedChange={() => handleCheckboxChange(type)}
-              />
+              <RadioGroupItem value={type} id={`type-${type}`} />
               <Label
                 htmlFor={`type-${type}`}
                 className="text-sm cursor-pointer"
@@ -161,7 +162,7 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({
               </Label>
             </div>
           ))}
-        </div>
+        </RadioGroup>
       </div>
 
       {/* Duration */}
@@ -196,3 +197,5 @@ export const ActivityFilter: React.FC<ActivityFilterProps> = ({
     </div>
   );
 };
+
+export default ActivityFilter;
