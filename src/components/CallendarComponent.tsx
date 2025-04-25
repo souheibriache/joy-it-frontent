@@ -9,7 +9,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { normalize } from "@/utils/mathods";
-import { Schedule } from "@/utils/api/schedule-api";
+import type { Schedule } from "@/utils/api/schedule-api";
 import { ScheduleStatusEnum } from "@/types/schedule";
 
 declare type Props = {
@@ -81,22 +81,24 @@ const CalendarComponent = ({ reservations }: Props) => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-sm w-full max-w-sm">
+    <div className="p-4 sm:p-6 bg-white rounded-lg shadow-sm w-full max-w-[320px] sm:max-w-sm">
       {/* Title */}
-      <h2 className="text-xl font-bold text-teal-800 mb-6 border-l-4 border-green-500 pl-3">
+      <h2 className="text-lg sm:text-xl font-bold text-teal-800 mb-4 sm:mb-6 border-l-4 border-green-500 pl-3">
         MES RESERVATIONS
       </h2>
 
       {/* Calendar Section */}
-      <div className="mb-6">
-        <h3 className="text-base font-medium text-gray-800 mb-2">Calendrier</h3>
-        <div className="bg-gray-100 p-4 rounded-lg">
+      <div className="mb-4 sm:mb-6">
+        <h3 className="text-sm sm:text-base font-medium text-gray-800 mb-2">
+          Calendrier
+        </h3>
+        <div className="bg-gray-100 p-2 sm:p-4 rounded-lg">
           <Calendar
             onChange={(d) =>
               setSelectedDate(new Date(d?.toLocaleString() as string))
             }
             value={selectedDate}
-            className="custom-calendar border-none shadow-none"
+            className="custom-calendar border-none shadow-none text-sm sm:text-base"
             navigationLabel={({ date }) => formatMonthYear(date)}
             formatShortWeekday={(locale, date) => {
               locale;
@@ -150,13 +152,15 @@ const CalendarComponent = ({ reservations }: Props) => {
 
       {/* Events List */}
       <div>
-        <h3 className="text-base font-medium text-gray-800 mb-3">Évènement</h3>
+        <h3 className="text-sm sm:text-base font-medium text-gray-800 mb-2 sm:mb-3">
+          Évènement
+        </h3>
         {todaysEvents?.length === 0 ? (
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 text-xs sm:text-sm">
             Aucun événement pour cette date.
           </p>
         ) : (
-          <ul className="space-y-3">
+          <ul className="space-y-2 sm:space-y-3">
             {todaysEvents?.map((evt: Schedule) => {
               const isOpen = openId === evt.id;
               const borderColor = isOpen
@@ -170,11 +174,11 @@ const CalendarComponent = ({ reservations }: Props) => {
                 >
                   <button
                     onClick={() => setOpenId(isOpen ? null : evt.id)}
-                    className="w-full flex items-center justify-between p-3"
+                    className="w-full flex items-center justify-between p-2 sm:p-3"
                   >
                     <div className="flex items-start">
                       <div className="text-left">
-                        <div className="font-bold uppercase text-gray-800">
+                        <div className="font-bold uppercase text-gray-800 text-xs sm:text-sm">
                           {evt.activity?.name || evt.title}
                         </div>
                         <div className="text-xs text-gray-500">
@@ -195,7 +199,7 @@ const CalendarComponent = ({ reservations }: Props) => {
                         {/* Display status in French */}
                         <div className="text-xs mt-1">
                           <span
-                            className="px-2 py-0.5 rounded-full text-white"
+                            className="px-2 py-0.5 rounded-full text-white text-[10px] sm:text-xs"
                             style={{
                               backgroundColor: getEventColor(evt.status),
                             }}
@@ -206,18 +210,24 @@ const CalendarComponent = ({ reservations }: Props) => {
                       </div>
                     </div>
                     {isOpen ? (
-                      <ChevronUp size={16} className="text-gray-400" />
+                      <ChevronUp
+                        size={16}
+                        className="text-gray-400 flex-shrink-0 ml-2"
+                      />
                     ) : (
-                      <ChevronDown size={16} className="text-gray-400" />
+                      <ChevronDown
+                        size={16}
+                        className="text-gray-400 flex-shrink-0 ml-2"
+                      />
                     )}
                   </button>
                   {isOpen && evt.activity && (
-                    <div className="px-4 pb-4 text-sm text-gray-600">
+                    <div className="px-3 sm:px-4 pb-3 sm:pb-4 text-xs sm:text-sm text-gray-600">
                       {/* Activity Details */}
-                      <div className="space-y-3 mt-2">
+                      <div className="space-y-2 sm:space-y-3 mt-2">
                         {evt.activity.images &&
                           evt.activity.images.length > 0 && (
-                            <div className="w-full h-40 overflow-hidden rounded-lg">
+                            <div className="w-full h-32 sm:h-40 overflow-hidden rounded-lg">
                               <img
                                 src={
                                   evt.activity.images[
@@ -231,38 +241,42 @@ const CalendarComponent = ({ reservations }: Props) => {
                           )}
 
                         <div className="mt-2">
-                          <p className="text-gray-700">
+                          <p className="text-gray-700 text-xs sm:text-sm">
                             {evt.activity.description}
                           </p>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-2 mt-3">
+                        <div className="grid grid-cols-2 gap-2 mt-2 sm:mt-3">
                           <div>
-                            <p className="text-xs text-gray-500">Durée</p>
-                            <p className="font-medium">
+                            <p className="text-[10px] sm:text-xs text-gray-500">
+                              Durée
+                            </p>
+                            <p className="font-medium text-xs sm:text-sm">
                               {evt.activity.duration} heurs
                             </p>
                           </div>
                         </div>
 
                         <div className="mt-2">
-                          <p className="text-xs text-gray-500">Lieu</p>
+                          <p className="text-[10px] sm:text-xs text-gray-500">
+                            Lieu
+                          </p>
                           {evt?.activity?.address ? (
                             <>
-                              <p className="font-medium">
+                              <p className="font-medium text-xs sm:text-sm">
                                 {evt.activity.address},{" "}
                                 {evt.activity.postalCode} {evt.activity.city}
                               </p>
                             </>
                           ) : (
-                            <p>Chez le client</p>
+                            <p className="text-xs sm:text-sm">Chez le client</p>
                           )}
                           {evt.activity.locationUrl && (
                             <a
                               href={evt.activity.locationUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-primary hover:underline text-xs inline-block mt-1"
+                              className="text-primary hover:underline text-[10px] sm:text-xs inline-block mt-1"
                             >
                               Voir sur la carte
                             </a>
@@ -276,7 +290,7 @@ const CalendarComponent = ({ reservations }: Props) => {
                                 (category, index) => (
                                   <span
                                     key={index}
-                                    className="px-2 py-1 bg-gray-100 text-xs rounded-full text-gray-700"
+                                    className="px-2 py-1 bg-gray-100 text-[10px] sm:text-xs rounded-full text-gray-700"
                                   >
                                     {category}
                                   </span>

@@ -15,10 +15,16 @@ import {
 import { AlertCircle, ArrowLeft, CheckCircle2, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
+import { useFetchCompany } from "@/utils/api/company-api";
+import { useDispatch } from "react-redux";
+import { fetchCompanySuccess } from "@/redux/auth/company-slice";
 
 const PaymentDetails: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { fetchCompany } = useFetchCompany();
+  const dispatch = useDispatch();
+
   const sessionId = searchParams.get("session_id");
   const { session, isLoading, error } = useGetCheckoutSession(sessionId || "");
 
@@ -61,6 +67,12 @@ const PaymentDetails: React.FC = () => {
       </div>
     );
   }
+
+  fetchCompany().then((companyData: any) => {
+    if (companyData) {
+      dispatch(fetchCompanySuccess(companyData));
+    }
+  });
 
   return (
     <motion.div
