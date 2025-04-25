@@ -18,6 +18,7 @@ import { motion } from "framer-motion";
 import { useFetchCompany } from "@/utils/api/company-api";
 import { useDispatch } from "react-redux";
 import { fetchCompanySuccess } from "@/redux/auth/company-slice";
+import { useEffect } from "react";
 
 const PaymentDetails: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -27,6 +28,16 @@ const PaymentDetails: React.FC = () => {
 
   const sessionId = searchParams.get("session_id");
   const { session, isLoading, error } = useGetCheckoutSession(sessionId || "");
+
+  useEffect(() => {
+    if (session && !isLoading && !error) {
+      fetchCompany().then((companyData: any) => {
+        if (companyData) {
+          dispatch(fetchCompanySuccess(companyData));
+        }
+      });
+    }
+  }, [error, session, isLoading]);
 
   if (isLoading) {
     return (
@@ -67,12 +78,6 @@ const PaymentDetails: React.FC = () => {
       </div>
     );
   }
-
-  fetchCompany().then((companyData: any) => {
-    if (companyData) {
-      dispatch(fetchCompanySuccess(companyData));
-    }
-  });
 
   return (
     <motion.div
