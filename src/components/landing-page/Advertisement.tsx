@@ -4,7 +4,7 @@ type Props = {};
 
 const Advertisement = ({}: Props) => {
   return (
-    <div className="flex-row w-full bg-gradient-to-tl from-primary from-30% to-white mt-10 md:mt-20">
+    <div className="flex-row w-[100vw] bg-gradient-to-tl from-primary from-30% to-white mt-10 md:mt-20">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 py-12 md:py-0">
         <div className="flex flex-col gap-6 items-center md:-translate-y-12 md:scale-110 md:ml-0 lg:ml-[50px] xl:ml-[100px] order-2 md:order-1 mt-8 md:mt-0">
           <img

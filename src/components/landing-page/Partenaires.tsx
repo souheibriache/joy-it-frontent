@@ -1,7 +1,6 @@
 import decathlon from "../../assets/partenaires/decathlon.png";
 import foodles from "../../assets/partenaires/foodles.png";
-import foresthill from "../../assets/partenaires/foresthill.png";
-import gymlib from "../../assets/partenaires/gymlib.png";
+import lesvergers from "../../assets/partenaires/lesvergers.png";
 import kee from "../../assets/partenaires/kee.png";
 import keizio from "../../assets/partenaires/keizio.png";
 
@@ -11,8 +10,7 @@ const Partenaires = ({}: Props) => {
   const partners = [
     { img: decathlon, alt: "Decathlon" },
     { img: foodles, alt: "Foodles" },
-    { img: foresthill, alt: "Forest Hill" },
-    { img: gymlib, alt: "Gymlib" },
+    { img: lesvergers, alt: "lesvergers" },
     { img: kee, alt: "Kee" },
     { img: keizio, alt: "Keizio" },
   ];
@@ -23,7 +21,8 @@ const Partenaires = ({}: Props) => {
         <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary text-center">
           Nos partenaires de qualité
         </h1>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-10 lg:gap-12 w-full">
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-10 lg:gap-12 w-full mx-auto">
           {partners.map((partner, index) => (
             <div key={index} className="flex justify-center">
               <img

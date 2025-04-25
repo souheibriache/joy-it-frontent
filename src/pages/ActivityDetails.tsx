@@ -13,7 +13,7 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import StarIcon from "../assets/icons/StarIcon.svg";
 import HalfStarIcon from "../assets/icons/HalfStarIcon.svg";
 import Footer from "@/components/Footer";
@@ -43,9 +43,11 @@ import { fr } from "date-fns/locale";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCompanySuccess } from "@/redux/auth/company-slice";
+import type { ActivityType } from "@/types/activity";
 
 const ActivityDetails = () => {
   const { activityId } = useParams<{ activityId: string }>();
+  const navigate = useNavigate();
   const [mainImage, setMainImage] = useState<any>();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const today = startOfDay(new Date());
@@ -56,7 +58,10 @@ const ActivityDetails = () => {
   const [scheduledDate, setScheduledDate] = useState<Date | null>(null);
 
   const dispatch = useDispatch();
-  const { currentCompany } = useSelector((state: any) => state.company);
+  const { currentCompany } = useSelector((state: any) => ({
+    currentCompany: state.company.currentCompany,
+    currentUser: state.user?.currentUser,
+  }));
 
   const { activity, isLoading: isFetching } = useGetActivityById(
     activityId || ""
@@ -74,7 +79,43 @@ const ActivityDetails = () => {
 
   const { fetchCompany } = useFetchCompany();
 
+  // Check if user has available credits for this activity type
+  const hasAvailableCredits = () => {
+    if (!currentCompany || !activity) return false;
+
+    const currentPlan = currentCompany?.serviceOrders?.find(
+      (order: any) => order.status === "ACTIVE"
+    );
+    if (!currentPlan) return false;
+
+    const availableServices: Record<string, number> = {};
+    currentPlan?.details.forEach(
+      (detail: any) =>
+        (availableServices[detail.serviceType] =
+          detail.allowedBookings - detail.bookingsUsed)
+    );
+
+    // Check if user has credits for this activity type
+    return availableServices[activity.type] > 0;
+  };
+
   const handleSchedule = () => {
+    // Check if user is authenticated
+    if (!currentCompany) {
+      toast.error("Veuillez vous connecter pour réserver cette activité");
+      navigate("/login", { state: { from: `/activities/${activityId}` } });
+      return;
+    }
+
+    // Check if user has available credits
+    if (!hasAvailableCredits()) {
+      toast.error(
+        "Vous n'avez pas assez de crédits disponibles pour ce type d'activité. Veuillez rajouter un abonnement."
+      );
+      navigate("/order");
+      return;
+    }
+
     if (!selectedDate) {
       toast.error("Veuillez sélectionner une date");
       return;
@@ -264,12 +305,44 @@ const ActivityDetails = () => {
   );
 
   const renderAvailableCredits = () => {
-    if (!currentCompany) return null;
+    if (!currentCompany) {
+      return (
+        <div className="bg-amber-50 p-4 rounded-lg mb-6 border border-amber-200">
+          <h3 className="font-medium text-amber-800 mb-2 flex items-center">
+            <Info className="h-5 w-5 mr-2" />
+            Connectez-vous pour réserver
+          </h3>
+          <p className="text-amber-700 text-sm">
+            Vous devez être connecté et avoir un abonnement actif pour réserver
+            cette activité.
+          </p>
+        </div>
+      );
+    }
 
     const currentPlan = currentCompany?.serviceOrders?.find(
       (order: any) => order.status === "ACTIVE"
     );
-    if (!currentPlan) return null;
+    if (!currentPlan) {
+      return (
+        <div className="bg-amber-50 p-4 rounded-lg mb-6 border border-amber-200">
+          <h3 className="font-medium text-amber-800 mb-2">
+            Aucun abonnement actif
+          </h3>
+          <p className="text-amber-700 text-sm">
+            Vous n'avez pas d'abonnement actif. Veuillez souscrire à un
+            abonnement pour réserver cette activité.
+          </p>
+          <Button
+            variant="outline"
+            className="mt-3 text-primary border-primary"
+            onClick={() => navigate("/order")}
+          >
+            Voir les abonnements
+          </Button>
+        </div>
+      );
+    }
 
     const availableServices: Record<string, number> = {};
     currentPlan?.details.forEach(
@@ -278,22 +351,55 @@ const ActivityDetails = () => {
           detail.allowedBookings - detail.bookingsUsed)
     );
 
+    // Check if the activity type matches any available service
+    const activityType = activity?.type as ActivityType;
+    const hasCredits = availableServices[activityType] > 0;
+
     return (
-      <div className="bg-slate-50 p-4 rounded-lg mb-6">
-        <h3 className="font-medium text-gray-900 mb-2">Crédits disponibles</h3>
-        <div className="flex gap-4">
-          {Object.entries(availableServices).map(([type, count]) => (
-            <div key={type} className="flex items-center gap-2">
-              <span className="text-sm text-gray-700">{type}:</span>
-              <Badge
-                variant="outline"
-                className="bg-purple-100 text-purple-800 font-semibold"
-              >
-                {count}
-              </Badge>
-            </div>
-          ))}
+      <div
+        className={`p-4 rounded-lg mb-6 ${
+          hasCredits
+            ? "bg-green-50 border border-green-200"
+            : "bg-red-50 border border-red-200"
+        }`}
+      >
+        <h3
+          className={`font-medium mb-2 ${
+            hasCredits ? "text-green-800" : "text-red-800"
+          }`}
+        >
+          Crédits disponibles
+        </h3>
+        <div className="flex gap-4 flex-wrap">
+          {Object.entries(availableServices).map(([type, count]) => {
+            const isCurrentType = type === activityType;
+            return (
+              <div key={type} className="flex items-center gap-2">
+                <span className="text-sm text-gray-700">
+                  {categories(type as ActivityType)}:
+                </span>
+                <Badge
+                  variant="outline"
+                  className={`${
+                    isCurrentType
+                      ? count > 0
+                        ? "bg-green-100 text-green-800"
+                        : "bg-red-100 text-red-800"
+                      : "bg-gray-100 text-gray-800"
+                  } font-semibold`}
+                >
+                  {count}
+                </Badge>
+              </div>
+            );
+          })}
         </div>
+        {!hasCredits && activityType && (
+          <p className="text-red-700 text-sm mt-2">
+            Vous n'avez pas assez de crédits pour ce type d'activité (
+            {categories(activityType)}).
+          </p>
+        )}
       </div>
     );
   };
@@ -428,14 +534,11 @@ const ActivityDetails = () => {
                   </div>
 
                   <div className="flex items-start gap-3">
-                    <Badge className="h-5 text-primary bg-primary/10 mt-1">
-                      {categories(activity?.type)}
-                    </Badge>
                     <div>
                       <h3 className="font-medium text-gray-900">Catégorie</h3>
-                      <p className="text-gray-700">
+                      <Badge className="h-5 text-primary bg-primary/10 mt-1">
                         {categories(activity?.type)}
-                      </p>
+                      </Badge>
                     </div>
                   </div>
 

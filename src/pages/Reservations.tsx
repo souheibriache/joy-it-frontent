@@ -39,7 +39,7 @@ const Reservations = ({}: Props) => {
   );
 
   return (
-    <div className="container mx-auto flex flex-col lg:flex-row h-full gap-6 lg:gap-10 px-4 py-6">
+    <div className="container mx-auto flex flex-col lg:flex-row  gap-6 lg:gap-10 px-4 py-6">
       <div className="w-full lg:flex-[3] bg-gray-100 h-full p-4 pt-6 lg:pt-10 rounded-lg">
         {/* Header Section */}
         <div className="bg-teal-800 text-white p-4 sm:p-6 rounded-lg mb-4 flex flex-col sm:flex-row justify-between items-center gap-4">

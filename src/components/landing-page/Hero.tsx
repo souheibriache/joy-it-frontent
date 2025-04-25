@@ -15,7 +15,7 @@ const Hero = ({}: Props) => {
 
   return (
     <div
-      className={`relative w-full h-full overflow-hidden bg-[url(/src/assets/landingpage_background.png)] bg-cover bg-center`}
+      className={`relative w-[100vw] h-full overflow-hidden bg-[url(/src/assets/landingpage_background.png)] bg-cover bg-center`}
     >
       <div className="flex flex-col-reverse md:flex-row gap-8 md:gap-12 lg:gap-20 py-10 px-4 md:p-12 lg:p-20 items-center container mx-auto">
         <div className="flex-1 flex flex-col items-center md:items-start gap-5 py-6 md:py-10 lg:py-20 justify-between md:pr-0 lg:pr-10 xl:pr-40 text-center md:text-left">
